@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ForexPulse — Your dashboard: charts, tools, and watchlist in one place.">
+  <title>Dashboard — ForexPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: {
+            brand: { DEFAULT: '#f59e0b', dark: '#d97706', light: '#fbbf24', glow: 'rgba(245, 158, 11, 0.15)' },
+            dark: { bg: '#050506', surface: '#0A0A0C', card: '#111114', border: '#222228', hover: '#1A1A1E' },
+            'fp-bg': 'var(--fp-bg)', 'fp-surface': 'var(--fp-surface-solid)', 'fp-accent': 'var(--fp-accent)', 'fp-muted': 'var(--fp-muted)',
+          },
+          backgroundImage: { 'hero-glow': 'radial-gradient(circle at 70% 50%, rgba(245,158,11,0.08) 0%, rgba(5,5,6,1) 60%)' },
+          animation: { float: 'float 6s ease-in-out infinite', 'float-delayed': 'float 6s ease-in-out 3s infinite', 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
+          keyframes: { float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } } },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="forexpulse-styles.css">
+  <style>
+    html, body { height: 100%; }
+    .fp-main main { overflow-y: auto; flex: 1; }
+  </style>
+</head>
+<body class="min-h-screen antialiased fp-app-body">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="fp-app-layout">
+
+    <!-- ====== Collapsible Sidebar ====== -->
+    <aside class="fp-sidebar fp-sidebar--collapsed" id="fp-sidebar">
+      <button type="button" class="fp-sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+        <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+        </svg>
+      </button>
+      <a href="index.html" class="fp-sidebar-brand" aria-label="ForexPulse home"><span class="nav-label">ForexPulse</span></a>
+      <button type="button" class="fp-sidebar-search fp-search-trigger w-full text-left" aria-label="Search pairs">
+        <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <span class="nav-label">Search</span>
+      </button>
+      <nav class="fp-sidebar-nav" aria-label="Main navigation">
+        <p class="fp-nav-group-title"><span class="nav-label">Navigation</span></p>
+        <a href="home.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="pairs.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          <span class="nav-label">All Pairs</span>
+        </a>
+        <a href="dashboard.html" class="active" aria-current="page">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="tools.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="nav-label">Tools</span>
+        </a>
+        <a href="watchlist.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+          <span class="nav-label">Watchlist</span>
+        </a>
+        <a href="market.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span class="nav-label">Market</span>
+        </a>
+        <a href="performance.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="nav-label">Performance</span>
+        </a>
+        <a href="auth.html" id="sidebar-nav-signin" style="display: none;">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          <span class="nav-label">Sign in</span>
+        </a>
+        <a href="auth.html" id="sidebar-nav-admin" style="display: none;">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span class="nav-label">Admin</span>
+        </a>
+      </nav>
+      <div class="fp-sidebar-footer">
+        <a href="FAQ.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span class="nav-label">Help Center</span>
+        </a>
+      </div>
+    </aside>
+    <script>(function(){var s=document.getElementById('fp-sidebar');if(s&&sessionStorage.getItem('fp-sidebar-was-expanded')==='1'){s.classList.remove('fp-sidebar--collapsed');sessionStorage.removeItem('fp-sidebar-was-expanded');}})();</script>
+
+    <!-- ====== Main Area ====== -->
+    <div class="fp-main">
+
+      <!-- Topbar -->
+      <header class="fp-topbar">
+        <div class="fp-topbar-left">
+          <button type="button" class="fp-search-trigger flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="background: var(--fp-dark-400); border: 1px solid var(--fp-border); color: var(--fp-muted);" aria-label="Search pairs">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i> Search
+          </button>
+        </div>
+        <div class="fp-topbar-right">
+          <span id="header-auth-block" class="fp-topbar-auth hidden">
+            <div class="fp-account-dropdown" id="header-account-dropdown">
+              <button type="button" class="fp-account-dropdown-trigger" id="header-account-dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Account menu">
+                <span id="header-user-avatar" class="fp-topbar-avatar" aria-hidden="true"></span>
+                <div class="fp-topbar-user-info">
+                  <span id="header-user-name" class="fp-topbar-user-name">Guest</span>
+                  <span id="header-user-email" class="fp-topbar-user-email"></span>
+                </div>
+                <svg class="w-4 h-4 ml-1 opacity-70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="fp-account-dropdown-panel" id="header-account-dropdown-panel" role="menu">
+                <a href="settings.html" role="menuitem">Settings</a>
+                <a href="dashboard.html" role="menuitem">Account balance</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" id="header-logout-btn" role="menuitem" style="color: var(--fp-accent);">Sign out</a>
+              </div>
+            </div>
+          </span>
+          <a href="auth.html" id="nav-signin" class="text-sm font-medium" style="color: var(--fp-accent);">Sign in</a>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main id="main-content" class="main-container py-6 md:py-8 flex-1 bg-dots">
+        <div id="fp-maintenance-banner" class="hidden mb-6 p-4 sm:p-5 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center gap-3 flex-wrap">
+          <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+          <div class="flex-1 min-w-0">
+            <p class="font-semibold text-white">Site under maintenance</p>
+            <p class="text-sm text-gray-400 mt-0.5">We'll be back shortly. Thank you for your patience.</p>
+          </div>
+        </div>
+        <script>(function(){ try { if (localStorage.getItem('forex_maintenance_mode') === 'true') document.getElementById('fp-maintenance-banner').classList.remove('hidden'); } catch (e) {} })();</script>
+
+        <!-- Page title (landing-style: badge + heading) -->
+        <div class="mb-6 sm:mb-8">
+          <span class="fp-badge-section">Dashboard</span>
+          <h1 class="fp-heading-with-gradient text-2xl sm:text-3xl md:text-4xl tracking-tight">Your <span class="text-gradient">Dashboard</span></h1>
+          <p class="mt-2 text-sm md:text-base text-gray-400 max-w-xl">Account balance, loss analysis, and trading overview in one place.</p>
+        </div>
+
+        <!-- Announcements (synced from admin; only active ones shown) -->
+        <div id="fp-announcements-root" class="mb-6"></div>
+        <script>
+        (function() {
+          var root = document.getElementById('fp-announcements-root');
+          if (!root) return;
+          try {
+            var raw = localStorage.getItem('forex_admin_announcements');
+            var list = raw ? JSON.parse(raw) : [];
+            var today = new Date().toISOString().slice(0, 10);
+            var active = list.filter(function(a) { return !a.until || a.until >= today; });
+            if (active.length === 0) return;
+            active.forEach(function(a) {
+              var div = document.createElement('div');
+              div.className = 'fp-card-landing fp-card p-4 sm:p-5 mb-3 border border-[#222228] rounded-xl flex items-start gap-3';
+              div.setAttribute('role', 'region');
+              div.setAttribute('aria-label', 'Announcement');
+              var icon = document.createElement('span');
+              icon.className = 'flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-amber-400';
+              icon.style.background = 'var(--fp-dark-400)';
+              icon.innerHTML = '<i class="fa-solid fa-bullhorn"></i>';
+              var wrap = document.createElement('div');
+              var title = document.createElement('p');
+              title.className = 'font-semibold text-white mb-1';
+              title.textContent = a.title || 'Announcement';
+              wrap.appendChild(title);
+              if (a.body && a.body.trim()) {
+                var body = document.createElement('p');
+                body.className = 'text-sm text-gray-400';
+                body.textContent = a.body;
+                wrap.appendChild(body);
+              }
+              div.appendChild(icon);
+              div.appendChild(wrap);
+              root.appendChild(div);
+            });
+          } catch (e) {}
+        })();
+        </script>
+
+        <!-- Account Header (card-style) -->
+        <div id="account-header" class="fp-card-landing flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-5 sm:p-6 mb-6 sm:mb-8">
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center font-mono text-sm font-semibold border-2 bg-dark-surface border-dark-border text-brand" id="acct-avatar">TR</div>
+              <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-dark-bg">
+                <div class="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-base font-medium text-white" id="acct-name">Trader</span>
+                <span class="text-xs text-gray-500 font-mono" id="acct-id">#888421</span>
+                <button class="text-gray-500 hover:text-amber-400 transition text-xs" onclick="navigator.clipboard.writeText(document.getElementById('acct-id').textContent)" title="Copy ID">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold fp-profit-bg tracking-wide" id="acct-status">ACTIVE</span>
+                <span class="text-xs text-gray-500 font-medium">Instant Funding</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Strip (landing nav-pill style) -->
+        <div class="fp-dashboard-tabs fp-dashboard-tabs-landing flex flex-wrap gap-2 mb-6 sm:mb-8 overflow-x-auto">
+          <button class="fp-tab-btn active flex-shrink-0" data-tab="account">Account Overview</button>
+          <button class="fp-tab-btn flex-shrink-0" data-tab="trading">Trading Overview</button>
+        </div>
+
+        <!-- ====== TAB: Account Overview ====== -->
+        <div id="tab-panel-account" class="tab-panel">
+
+          <!-- Balance Chart -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <section class="fp-card-landing fp-card fp-card-chart p-6 sm:p-8 lg:col-span-2">
+              <div id="dashboard-chart-fullscreen-wrapper" class="fp-chart-fullscreen-wrapper relative">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                  <div class="flex items-center gap-3">
+                    <h2 class="section-heading mb-0">Account Balance</h2>
+                    <p class="mb-0 text-xl font-semibold font-mono" style="color: var(--fp-foreground);">
+                      <span id="dashboard-account-balance">—</span>
+                      <span class="text-sm font-normal font-sans" style="color: var(--fp-muted);">USD</span>
+                      <span id="dashboard-live-rate" class="text-sm font-normal font-sans ml-2" style="color: var(--fp-muted);"></span>
+                    </p>
+                    <button type="button" class="fp-chart-expand-btn fp-chart-expand-btn--hide-in-fullscreen" id="dashboard-chart-expand-btn" aria-label="Expand chart" title="Expand chart">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                    </button>
+                  </div>
+                  <div class="flex items-center gap-2 fp-chart-header-right">
+                    <div class="fp-segment-group" id="dashboard-timeframe-group">
+                      <button type="button" class="fp-segment-btn" data-interval="60">1h</button>
+                      <button type="button" class="fp-segment-btn" data-interval="240">4h</button>
+                      <button type="button" class="fp-segment-btn active" data-interval="D">1d</button>
+                      <button type="button" class="fp-segment-btn" data-interval="W">1w</button>
+                    </div>
+                    <button type="button" class="fp-chart-fullscreen-close" id="dashboard-chart-fullscreen-close" aria-label="Exit fullscreen">Close</button>
+                  </div>
+                </div>
+                <div class="fp-chart-fullscreen-body">
+                  <div class="fp-chart-fullscreen-chart">
+                    <div id="dashboard-chart-skeleton" class="fp-skeleton rounded-xl overflow-hidden" style="min-height: 400px;"></div>
+                    <div id="dashboard-chart" class="dashboard-chart-container rounded-xl overflow-hidden hidden" style="min-height: 400px; flex: 1; background: var(--fp-dark-400);"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Loss Analysis -->
+            <section class="fp-card-landing fp-card p-6 sm:p-8">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="section-heading mb-0">Account Loss Analysis</h2>
+                <div class="fp-segment-group" id="dashboard-loss-group">
+                  <button type="button" class="fp-segment-btn active">Max Recorded</button>
+                  <button type="button" class="fp-segment-btn">Current</button>
+                </div>
+              </div>
+              <div id="dashboard-loss-content" class="space-y-4">
+                <div>
+                  <p class="text-sm mb-2" style="color: var(--fp-muted);">Initial Deposit Limit Level</p>
+                  <div class="fp-progress-track"><div id="dashboard-loss-deposit-bar" class="fp-progress-fill fp-progress-fill--accent" style="width: 0%;"></div></div>
+                  <p class="text-sm mt-1" style="color: var(--fp-accent);" id="dashboard-loss-deposit-label">Initial Deposit —</p>
+                </div>
+                <div>
+                  <p class="text-sm mb-2" style="color: var(--fp-muted);">Daily Loss Limit Level</p>
+                  <div class="fp-progress-track"><div id="dashboard-loss-level-bar" class="fp-progress-fill fp-progress-fill--danger" style="width: 0%;"></div></div>
+                  <p class="text-sm mt-1" style="color: var(--fp-danger);" id="dashboard-loss-level-label">Loss Level —</p>
+                </div>
+              </div>
+              <p class="mt-4 text-sm" style="color: var(--fp-muted);" id="dashboard-loss-reset">Next Daily Loss Reset —</p>
+            </section>
+
+            <!-- Quick Links (landing-style cards) -->
+            <section class="fp-card-landing p-6 sm:p-8">
+              <h2 class="section-heading mb-4">Quick Links</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="index.html" class="fp-quicklink-card group">
+                  <span class="fp-quicklink-icon"><i class="fa-solid fa-rocket text-sm"></i></span>
+                  <span class="fp-quicklink-label">Landing</span>
+                  <i class="fa-solid fa-arrow-right fp-quicklink-arrow text-gray-500 group-hover:text-amber-400"></i>
+                </a>
+                <a href="tools.html" class="fp-quicklink-card group">
+                  <span class="fp-quicklink-icon"><i class="fa-solid fa-calculator text-sm"></i></span>
+                  <span class="fp-quicklink-label">Pip & Tools</span>
+                  <i class="fa-solid fa-arrow-right fp-quicklink-arrow text-gray-500 group-hover:text-amber-400"></i>
+                </a>
+                <a href="pairs.html" class="fp-quicklink-card group">
+                  <span class="fp-quicklink-icon"><i class="fa-solid fa-chart-line text-sm"></i></span>
+                  <span class="fp-quicklink-label">All Pairs</span>
+                  <i class="fa-solid fa-arrow-right fp-quicklink-arrow text-gray-500 group-hover:text-amber-400"></i>
+                </a>
+                <a href="auth.html" class="fp-quicklink-card group">
+                  <span class="fp-quicklink-icon"><i class="fa-solid fa-user-plus text-sm"></i></span>
+                  <span class="fp-quicklink-label">Account</span>
+                  <i class="fa-solid fa-arrow-right fp-quicklink-arrow text-gray-500 group-hover:text-amber-400"></i>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ====== TAB: Trading Overview ====== -->
+        <div id="tab-panel-trading" class="tab-panel hidden">
+
+          <!-- P/L Card + Summary -->
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+
+            <!-- P/L Card -->
+            <div class="fp-card-landing fp-card p-6 sm:p-8 relative overflow-hidden" id="pl-card">
+              <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" style="background: rgba(34,197,94,0.04);"></div>
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Profit / Loss</span>
+                  </div>
+                  <div class="text-3xl font-semibold font-mono tracking-tight text-white" id="pl-value">--</div>
+                </div>
+                <div class="flex items-center gap-2.5 px-3 py-2 rounded-lg" id="pl-risk-badge" style="background: var(--fp-dark-400); border: 1px solid var(--fp-border);">
+                  <div class="relative">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div class="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping opacity-75"></div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-300" id="pl-risk-text">Low Risk</span>
+                </div>
+              </div>
+
+              <div class="flex gap-6 mb-6 relative z-10">
+                <div class="flex-1">
+                  <div class="flex justify-between text-[10px] mb-1.5">
+                    <span class="text-gray-500">Loss</span>
+                    <span class="text-gray-400 font-mono" id="pl-loss-pct">--</span>
+                  </div>
+                  <div class="h-16 rounded-lg overflow-hidden relative" style="background: var(--fp-dark-400);">
+                    <div id="pl-loss-bar" class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-red-500/80 to-red-500/30 transition-all duration-500" style="height: 0%;"></div>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between text-[10px] mb-1.5">
+                    <span class="text-gray-500">Profit</span>
+                    <span class="font-mono fp-profit" id="pl-profit-pct">--</span>
+                  </div>
+                  <div class="h-16 rounded-lg overflow-hidden relative" style="background: var(--fp-dark-400);">
+                    <div id="pl-profit-bar" class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-green-500/80 to-green-500/30 transition-all duration-500" style="height: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pl-mini-chart" class="h-20 w-full rounded-lg overflow-hidden relative z-10 flex items-end gap-[2px]" style="background: var(--fp-dark-400);"></div>
+
+              <div id="pl-stats" class="mt-6 pt-6 space-y-3 relative z-10" style="border-top: 1px solid var(--fp-border);"></div>
+            </div>
+
+            <!-- Metrics Grid (spans 2 cols on xl) -->
+            <div class="xl:col-span-2">
+              <h3 class="text-sm font-medium text-gray-400 mb-4 tracking-wide">Trading Objectives</h3>
+              <div id="metrics-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+            </div>
+          </div>
+
+          <!-- Trading History Table -->
+          <div class="fp-card-landing fp-card overflow-hidden" style="padding: 0;">
+            <div class="p-5 flex justify-between items-center" style="border-bottom: 1px solid var(--fp-border);">
+              <h3 class="text-sm font-medium text-gray-300">Trading History</h3>
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-xs"></i>
+                <input type="text" placeholder="Search trades..." id="trade-search" class="text-xs text-white rounded-lg pl-9 pr-4 py-2 w-56 placeholder-gray-600 outline-none transition" style="background: var(--fp-dark-400); border: 1px solid var(--fp-border);" onfocus="this.style.borderColor='rgba(245,158,11,0.4)'" onblur="this.style.borderColor='var(--fp-border)'">
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="fp-table w-full text-left text-[11px]">
+                <thead class="text-gray-500 font-medium uppercase tracking-wider" style="background: var(--fp-dark-400);">
+                  <tr>
+                    <th class="px-6 py-3.5 font-medium">Ticket</th>
+                    <th class="px-6 py-3.5 font-medium">Open Time</th>
+                    <th class="px-6 py-3.5 font-medium">Symbol</th>
+                    <th class="px-6 py-3.5 font-medium">Side</th>
+                    <th class="px-6 py-3.5 font-medium">Volume</th>
+                    <th class="px-6 py-3.5 font-medium">Open Price</th>
+                    <th class="px-6 py-3.5 font-medium">Close Price</th>
+                    <th class="px-6 py-3.5 font-medium text-right">Net Profit</th>
+                  </tr>
+                </thead>
+                <tbody id="trade-history-body" class="text-gray-400" style="--tw-divide-opacity: 1;"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="fp-footer">
+    <div class="inner">
+      <a href="index.html" class="brand" id="fp-footer-brand">ForexPulse</a>
+      <nav class="links" aria-label="Footer navigation">
+        <a href="home.html">Home</a>
+        <a href="pairs.html">All Pairs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="watchlist.html">Watchlist</a>
+        <a href="market.html">Market</a>
+        <a href="performance.html">Performance</a>
+        <a href="tools.html">Tools</a>
+        <a href="FAQ.html">Help Center</a>
+        <a href="auth.html" id="footer-signin" style="display: none;">Sign in</a>
+      </nav>
+      <span class="copy">&copy; 2025 ForexPulse</span>
+    </div>
+  </footer>
+  <script>
+  (function(){ var el = document.getElementById('fp-footer-brand'); if (!el) return; try { var raw = localStorage.getItem('forex_site_settings'); var s = raw ? JSON.parse(raw) : null; if (s && s.siteName && s.siteName.trim()) el.textContent = s.siteName.trim(); } catch (e) {} })();
+  </script>
+
+  <!-- ====== Scripts ====== -->
+  <script src="utils.js"></script>
+  <script src="forex-api.js"></script>
+  <script src="pairs.js"></script>
+  <script src="search-modal.js"></script>
+  <script src="auth.js"></script>
+
+  <!-- Auth redirect: require signed-in user; redirect admin to admin dashboard -->
+  <script>
+    (function () {
+      var user = window.getCurrentUser && window.getCurrentUser();
+      if (!user) { window.location.replace('auth.html'); return; }
+      if (user.role === 'admin') { window.location.replace('auth.html'); return; }
+    })();
+  </script>
+
+  <!-- Search modal trigger -->
+  <script>
+    (function () {
+      document.querySelectorAll('.fp-search-trigger').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (window.ForexPulseSearchModal && window.ForexPulseSearchModal.open) window.ForexPulseSearchModal.open();
+        });
+      });
+    })();
+  </script>
+
+  <!-- ====== Dashboard Core JS ====== -->
+  <script>
+  (function () {
+
+    // ---- Sidebar Collapse ----
+    var sidebar = document.getElementById('fp-sidebar');
+    var toggleBtn = document.getElementById('sidebar-toggle');
+    var SIDEBAR_KEY = 'sidebarCollapsed';
+
+    function applySidebarState() {
+      if (sessionStorage.getItem('fp-sidebar-open-after-login') === '1') {
+        sessionStorage.removeItem('fp-sidebar-open-after-login');
+        localStorage.setItem(SIDEBAR_KEY, 'false');
+        if (sidebar) sidebar.classList.remove('fp-sidebar--collapsed');
+        return;
+      }
+      if (localStorage.getItem(SIDEBAR_KEY) === 'true') {
+        sidebar.classList.add('fp-sidebar--collapsed');
+      } else {
+        sidebar.classList.remove('fp-sidebar--collapsed');
+      }
+    }
+
+    if (sidebar && toggleBtn) {
+      applySidebarState();
+      toggleBtn.addEventListener('click', function () {
+        var isCollapsed = sidebar.classList.toggle('fp-sidebar--collapsed');
+        localStorage.setItem(SIDEBAR_KEY, isCollapsed);
+      });
+    }
+
+    // ---- Tab Switching ----
+    var tabBtns = document.querySelectorAll('.fp-tab-btn[data-tab]');
+    var panels = {
+      account: document.getElementById('tab-panel-account'),
+      trading: document.getElementById('tab-panel-trading')
+    };
+
+    tabBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var tab = btn.getAttribute('data-tab');
+        tabBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        Object.keys(panels).forEach(function (k) {
+          if (panels[k]) panels[k].classList.toggle('hidden', k !== tab);
+        });
+      });
+    });
+
+    // ---- loadUserProfile ----
+    function loadUserProfile() {
+      var raw = localStorage.getItem('userProfile');
+      var profile;
+      try { profile = JSON.parse(raw); } catch (e) { profile = null; }
+      if (!profile || !profile.name) {
+        profile = { name: 'Trader', status: 'Active', id: '888421' };
+        localStorage.setItem('userProfile', JSON.stringify(profile));
+      }
+      var initials = profile.name.split(/\s+/).map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+      var avatarEl = document.getElementById('acct-avatar');
+      var nameEl = document.getElementById('acct-name');
+      var idEl = document.getElementById('acct-id');
+      var statusEl = document.getElementById('acct-status');
+      if (avatarEl) avatarEl.textContent = initials;
+      if (nameEl) nameEl.textContent = profile.name;
+      if (idEl) idEl.textContent = '#' + profile.id;
+      if (statusEl) statusEl.textContent = (profile.status || 'Active').toUpperCase();
+      return profile;
+    }
+    window.loadUserProfile = loadUserProfile;
+    loadUserProfile();
+
+    // ---- renderMetrics(metrics) ----
+    function renderMetrics(metrics) {
+      var grid = document.getElementById('metrics-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      metrics.forEach(function (m) {
+        var changeClass = m.changeDir === 'up' ? 'fp-profit' : m.changeDir === 'down' ? 'fp-loss' : 'text-gray-600';
+        var arrow = m.changeDir === 'up' ? '<i class="fa-solid fa-arrow-trend-up text-[10px]"></i>' : m.changeDir === 'down' ? '<i class="fa-solid fa-arrow-trend-down text-[10px]"></i>' : '';
+        var card = document.createElement('div');
+        card.className = 'fp-metric-card-dynamic';
+        card.innerHTML =
+          '<div class="flex justify-between items-start mb-3">' +
+            '<span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">' + m.label + '</span>' +
+          '</div>' +
+          '<div class="text-2xl font-semibold text-white mb-2 font-mono">' + m.value + '</div>' +
+          '<div class="flex items-center gap-1.5 mb-3">' +
+            (m.change ? arrow + ' <span class="text-[10px] font-medium ' + changeClass + '">' + m.change + '</span>' : '<span class="text-[10px] text-gray-600">—</span>') +
+          '</div>' +
+          '<div class="w-full h-1 rounded-full overflow-hidden" style="background: var(--fp-dark-400);">' +
+            '<div class="h-full rounded-full transition-all duration-700" style="width: ' + (m.progress || 0) + '%; background: var(--fp-accent);"></div>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+    window.renderMetrics = renderMetrics;
+
+    // ---- renderPLCard(data) ----
+    function renderPLCard(data) {
+      var plValue = document.getElementById('pl-value');
+      if (plValue) {
+        var prefix = data.value >= 0 ? '+$' : '-$';
+        plValue.textContent = prefix + Math.abs(data.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        plValue.className = 'text-3xl font-semibold font-mono tracking-tight ' + (data.value >= 0 ? 'fp-profit' : 'fp-loss');
+      }
+      var lossBar = document.getElementById('pl-loss-bar');
+      var profitBar = document.getElementById('pl-profit-bar');
+      if (lossBar) lossBar.style.height = Math.min(data.lossPct || 0, 100) + '%';
+      if (profitBar) profitBar.style.height = Math.min((data.profitPct || 0) * 4.5, 100) + '%';
+      var lossPct = document.getElementById('pl-loss-pct');
+      var profitPct = document.getElementById('pl-profit-pct');
+      if (lossPct) lossPct.textContent = (data.lossPct || 0) + '%';
+      if (profitPct) profitPct.textContent = (data.profitPct || 0).toFixed(1) + '%';
+      var riskText = document.getElementById('pl-risk-text');
+      if (riskText) riskText.textContent = data.riskLevel || 'Low Risk';
+      var stats = document.getElementById('pl-stats');
+      if (stats && data.stats) {
+        stats.innerHTML = data.stats.map(function (s) {
+          return '<div class="flex justify-between items-center">' +
+            '<span class="text-[11px] text-gray-500">' + s.label + '</span>' +
+            '<span class="text-xs text-gray-300 font-mono">' + s.value + '</span>' +
+          '</div>';
+        }).join('');
+      }
+      var miniChart = document.getElementById('pl-mini-chart');
+      if (miniChart && data.miniChartData) {
+        miniChart.innerHTML = '';
+        var max = Math.max.apply(null, data.miniChartData);
+        data.miniChartData.forEach(function (v) {
+          var bar = document.createElement('div');
+          var h = max > 0 ? (v / max) * 100 : 0;
+          var isPositive = v > (max * 0.5);
+          bar.className = 'flex-1 rounded-sm transition-all duration-300';
+          bar.style.height = Math.max(h, 4) + '%';
+          bar.style.background = isPositive ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.5)';
+          bar.style.minWidth = '2px';
+          miniChart.appendChild(bar);
+        });
+      }
+    }
+    window.renderPLCard = renderPLCard;
+
+    // ---- renderTradeHistory(trades) ----
+    function renderTradeHistory(trades) {
+      var tbody = document.getElementById('trade-history-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      trades.forEach(function (t) {
+        var sideClass = t.side === 'Buy'
+          ? 'text-green-400 bg-green-500/10 border border-green-500/20'
+          : 'text-red-400 bg-red-500/10 border border-red-500/20';
+        var profitClass = t.netProfit >= 0 ? 'fp-profit' : 'fp-loss';
+        var profitPrefix = t.netProfit >= 0 ? '+' : '';
+        var tr = document.createElement('tr');
+        tr.className = 'hover:bg-white/[0.02] transition-colors';
+        tr.style.borderBottom = '1px solid var(--fp-border)';
+        tr.innerHTML =
+          '<td class="px-6 py-4 font-mono text-gray-500 text-[11px]">' + t.ticket + '</td>' +
+          '<td class="px-6 py-4 text-gray-400">' + t.openTime + '</td>' +
+          '<td class="px-6 py-4 text-white font-medium">' + t.symbol + '</td>' +
+          '<td class="px-6 py-4"><span class="px-2.5 py-1 rounded text-[10px] font-semibold ' + sideClass + '">' + t.side + '</span></td>' +
+          '<td class="px-6 py-4 font-mono">' + t.volume + '</td>' +
+          '<td class="px-6 py-4 font-mono text-gray-300">' + t.openPrice + '</td>' +
+          '<td class="px-6 py-4 font-mono text-gray-300">' + t.closePrice + '</td>' +
+          '<td class="px-6 py-4 text-right font-mono font-medium ' + profitClass + '">' + profitPrefix + '$' + Math.abs(t.netProfit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+    window.renderTradeHistory = renderTradeHistory;
+
+    // ---- Search filter for trading history ----
+    var searchInput = document.getElementById('trade-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        var q = searchInput.value.toLowerCase();
+        var rows = document.querySelectorAll('#trade-history-body tr');
+        rows.forEach(function (row) {
+          row.style.display = row.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+        });
+      });
+    }
+
+    // ---- Populate Trading Overview with sample data ----
+    renderMetrics([
+      { label: 'Trades', value: '68', change: '+5.2%', changeDir: 'up', progress: 25 },
+      { label: 'Lots', value: '286', change: '+4.2%', changeDir: 'up', progress: 60 },
+      { label: 'Avg RRR', value: '1.47', change: null, changeDir: null, progress: 45 },
+      { label: 'Win Rate', value: '65.4%', change: '+2.1%', changeDir: 'up', progress: 65 },
+      { label: 'Trading Days', value: '15', change: '+4.2%', changeDir: 'up', progress: 40 },
+      { label: 'Profit Share', value: '80%', change: null, changeDir: null, progress: 80 },
+      { label: 'Avg Win', value: '$458', change: '+2.1%', changeDir: 'up', progress: 100 },
+      { label: 'Avg Loss', value: '-$1,021', change: '-1.2%', changeDir: 'down', progress: 100 }
+    ]);
+
+    renderPLCard({
+      value: 7216.47,
+      lossPct: 23,
+      profitPct: 13.7,
+      riskLevel: 'Low Risk',
+      stats: [
+        { label: 'Balance', value: '$91,670.20' },
+        { label: 'Equity', value: '$91,670.20' },
+        { label: 'Account Size', value: '$100,000.00' }
+      ],
+      miniChartData: [35,68,45,72,38,85,52,90,48,78,55,82,62,70,88,42,75,60,95,50,80,65,72,58,92,40,78,55,85,62,70,48,88,52,75,68,82,45,90,58,72,80,55,95,42,85,60,78,50,88]
+    });
+
+    renderTradeHistory([
+      { ticket: '21055174', openTime: 'Feb 4, 25 - 16:35:05', symbol: 'GBPUSDx', side: 'Buy', volume: '0.15', openPrice: '1.27412', closePrice: '1.27523', netProfit: 245.50 },
+      { ticket: '21055175', openTime: 'Feb 4, 25 - 16:35:17', symbol: 'EURUSDx', side: 'Sell', volume: '0.30', openPrice: '1.08234', closePrice: '1.08156', netProfit: 186.00 },
+      { ticket: '21055176', openTime: 'Feb 4, 25 - 16:35:29', symbol: 'XAUUSD', side: 'Buy', volume: '0.10', openPrice: '2041.50', closePrice: '2038.20', netProfit: -330.00 },
+      { ticket: '21055177', openTime: 'Feb 4, 25 - 16:35:41', symbol: 'USDJPYx', side: 'Sell', volume: '0.25', openPrice: '148.562', closePrice: '148.423', netProfit: 412.80 },
+      { ticket: '21055178', openTime: 'Feb 4, 25 - 16:35:53', symbol: 'NAS100', side: 'Buy', volume: '0.05', openPrice: '17856.2', closePrice: '17892.5', netProfit: 181.50 },
+      { ticket: '21055179', openTime: 'Feb 3, 25 - 14:22:08', symbol: 'GBPUSDx', side: 'Sell', volume: '0.20', openPrice: '1.27189', closePrice: '1.27245', netProfit: -112.00 },
+      { ticket: '21055180', openTime: 'Feb 3, 25 - 14:22:20', symbol: 'US30', side: 'Buy', volume: '0.08', openPrice: '38456.0', closePrice: '38512.5', netProfit: 452.00 },
+      { ticket: '21055181', openTime: 'Feb 3, 25 - 14:22:32', symbol: 'EURUSDx', side: 'Buy', volume: '0.40', openPrice: '1.08056', closePrice: '1.08012', netProfit: -176.00 }
+    ]);
+
+  })();
+  </script>
+
+  <!-- TradingView Chart -->
+  <script>
+    (function initDashboardChart() {
+      var chartContainer = document.getElementById('dashboard-chart');
+      var chartSkeleton = document.getElementById('dashboard-chart-skeleton');
+      var timeframeGroup = document.getElementById('dashboard-timeframe-group');
+      var params = new URLSearchParams(window.location.search);
+      var pairParam = params.get('pair');
+      var defaultSymbol = pairParam
+        ? 'FX:' + decodeURIComponent(pairParam).replace(/\//g, '')
+        : 'FX:EURUSD';
+      var currentInterval = 'D';
+
+      function renderChart(interval) {
+        if (!chartContainer) return;
+        chartContainer.innerHTML = '';
+        chartContainer.classList.add('hidden');
+        if (chartSkeleton) chartSkeleton.classList.remove('hidden');
+        var div = document.createElement('div');
+        div.className = 'tradingview-widget-container';
+        div.style.cssText = 'height:100%;min-height:400px;width:100%;';
+        var inner = document.createElement('div');
+        inner.className = 'tradingview-widget-container__widget';
+        inner.style.cssText = 'height:100%;width:100%;';
+        div.appendChild(inner);
+        var script = document.createElement('script');
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        script.async = true;
+        script.textContent = JSON.stringify({
+          autosize: true, symbol: defaultSymbol, interval: interval,
+          timezone: 'Etc/UTC', theme: 'dark', style: '1', locale: 'en',
+          allow_symbol_change: false, calendar: false,
+          support_host: 'https://www.tradingview.com',
+        });
+        div.appendChild(script);
+        chartContainer.appendChild(div);
+        if (chartSkeleton) chartSkeleton.classList.add('hidden');
+        chartContainer.classList.remove('hidden');
+      }
+
+      if (timeframeGroup) {
+        timeframeGroup.addEventListener('click', function (e) {
+          var btn = e.target.closest('.fp-segment-btn[data-interval]');
+          if (!btn) return;
+          timeframeGroup.querySelectorAll('.fp-segment-btn').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentInterval = btn.getAttribute('data-interval');
+          renderChart(currentInterval);
+        });
+      }
+
+      if (chartContainer && chartSkeleton) {
+        chartSkeleton.classList.add('hidden');
+        chartContainer.classList.remove('hidden');
+        renderChart(currentInterval);
+      }
+
+      var wrapper = document.getElementById('dashboard-chart-fullscreen-wrapper');
+      var expandBtn = document.getElementById('dashboard-chart-expand-btn');
+      var closeBtn = document.getElementById('dashboard-chart-fullscreen-close');
+      if (wrapper && expandBtn) {
+        expandBtn.addEventListener('click', function () {
+          if (wrapper.requestFullscreen) wrapper.requestFullscreen();
+          else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+        });
+      }
+      function onFullscreenChange() {
+        if (!wrapper) return;
+        if (document.fullscreenElement === wrapper || document.webkitFullscreenElement === wrapper) {
+          wrapper.classList.add('is-fullscreen');
+          window.dispatchEvent(new Event('resize'));
+          setTimeout(function () { renderChart(currentInterval); }, 150);
+        } else {
+          wrapper.classList.remove('is-fullscreen');
+          setTimeout(function () { renderChart(currentInterval); }, 100);
+        }
+      }
+      document.addEventListener('fullscreenchange', onFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          if (document.exitFullscreen) document.exitFullscreen();
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        });
+      }
+    })();
+  </script>
+
+  <!-- Dashboard Data -->
+  <script>
+    (function initDashboardData() {
+      var balanceEl = document.getElementById('dashboard-account-balance');
+      var liveRateEl = document.getElementById('dashboard-live-rate');
+      var depositLabel = document.getElementById('dashboard-loss-deposit-label');
+      var lossLabel = document.getElementById('dashboard-loss-level-label');
+      var depositBar = document.getElementById('dashboard-loss-deposit-bar');
+      var lossBar = document.getElementById('dashboard-loss-level-bar');
+      var resetEl = document.getElementById('dashboard-loss-reset');
+
+      if (balanceEl) balanceEl.textContent = '10,000.00';
+
+      var params = new URLSearchParams(window.location.search);
+      var pairParam = params.get('pair');
+      var chartPair = pairParam ? decodeURIComponent(pairParam).replace(/-/g, '/') : 'EUR/USD';
+
+      if (window.ForexPulseAPI && liveRateEl) {
+        window.ForexPulseAPI.getPairRate(chartPair, function (err, rate) {
+          if (!err && rate != null) {
+            var decimals = chartPair.indexOf('JPY') !== -1 ? 2 : 5;
+            liveRateEl.textContent = '(Live ' + chartPair + ': ' + rate.toFixed(decimals) + ')';
+          }
+        });
+      }
+
+      var lossView = { maxRecorded: true };
+      var lossData = {
+        maxRecorded: { deposit: 10000, lossLevel: 9500, depositPct: 100, lossPct: 5, reset: '8h 24m' },
+        current: { deposit: 10000, lossLevel: 9850, depositPct: 100, lossPct: 1.5, reset: '8h 24m' },
+      };
+
+      function applyLossData() {
+        var d = lossView.maxRecorded ? lossData.maxRecorded : lossData.current;
+        if (depositLabel) depositLabel.textContent = 'Initial Deposit ' + (d.deposit != null ? '$' + Number(d.deposit).toLocaleString() : '—');
+        if (lossLabel) lossLabel.textContent = 'Loss Level ' + (d.lossLevel != null ? '$' + Number(d.lossLevel).toLocaleString() : '—');
+        if (depositBar) depositBar.style.width = (d.depositPct != null ? Math.min(100, Math.max(0, d.depositPct)) : 0) + '%';
+        if (lossBar) lossBar.style.width = (d.lossPct != null ? Math.min(100, Math.max(0, d.lossPct)) : 0) + '%';
+        if (resetEl) resetEl.textContent = d.reset != null ? 'Next Daily Loss Reset in ' + d.reset : 'Next Daily Loss Reset —';
+      }
+
+      var lossGroup = document.getElementById('dashboard-loss-group');
+      if (lossGroup) {
+        lossGroup.querySelectorAll('.fp-segment-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            lossView.maxRecorded = btn.textContent.trim().toLowerCase().indexOf('max') !== -1;
+            lossGroup.querySelectorAll('.fp-segment-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            applyLossData();
+          });
+        });
+      }
+      applyLossData();
+    })();
+  </script>
+
+  <!-- Header Auth -->
+  <script>
+    (function initHeaderAuth() {
+      var block = document.getElementById('header-auth-block');
+      var signInLink = document.getElementById('nav-signin');
+      var sidebarSignIn = document.getElementById('sidebar-nav-signin');
+      var sidebarAdmin = document.getElementById('sidebar-nav-admin');
+      var footerSignin = document.getElementById('footer-signin');
+      var avatar = document.getElementById('header-user-avatar');
+      var nameEl = document.getElementById('header-user-name');
+      var emailEl = document.getElementById('header-user-email');
+      var logoutBtn = document.getElementById('header-logout-btn');
+      if (!block || !window.getCurrentUser) return;
+      var user = window.getCurrentUser();
+      if (user) {
+        if (signInLink) signInLink.style.display = 'none';
+        if (sidebarSignIn) sidebarSignIn.style.display = 'none';
+        if (sidebarAdmin) sidebarAdmin.style.display = user.role === 'admin' ? '' : 'none';
+        if (footerSignin) footerSignin.style.display = 'none';
+        if (block) { block.style.display = 'flex'; block.classList.remove('hidden'); }
+        if (avatar) {
+          var name = (user.name || '').trim();
+          var initials = '?';
+          if (name) {
+            var parts = name.split(/\s+/);
+            initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase();
+          } else if ((user.email || '').trim()) {
+            initials = user.email.split('@')[0].slice(0, 2).toUpperCase();
+          }
+          avatar.textContent = initials;
+        }
+        if (nameEl) nameEl.textContent = user.name || 'User';
+        if (emailEl) emailEl.textContent = user.email || '—';
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (window.clearSession) window.clearSession();
+            window.location.href = 'index.html';
+          });
+        }
+      } else {
+        if (block) { block.style.display = 'none'; block.classList.add('hidden'); }
+        if (signInLink) signInLink.style.display = '';
+        if (sidebarSignIn) sidebarSignIn.style.display = '';
+        if (sidebarAdmin) sidebarAdmin.style.display = '';
+        if (footerSignin) footerSignin.style.display = '';
+      }
+    })();
+  </script>
+  <script>
+    (function initAccountDropdown() {
+      var trigger = document.getElementById('header-account-dropdown-trigger');
+      var panel = document.getElementById('header-account-dropdown-panel');
+      if (!trigger || !panel) return;
+      var settingsLink = panel.querySelector('a[href="settings.html"]');
+      if (settingsLink) settingsLink.addEventListener('click', function () { sessionStorage.setItem('fp-sidebar-closed-for-settings', '1'); });
+      function open() { panel.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); }
+      function close() { panel.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); }
+      function toggle() { panel.classList.contains('is-open') ? close() : open(); }
+      trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      document.addEventListener('click', function () { close(); });
+      panel.addEventListener('click', function (e) { e.stopPropagation(); });
+    })();
+  </script>
+</body>
+</html>

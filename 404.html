@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Page not found — ForexPulse">
+  <title>Page not found — ForexPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: {
+            brand: { DEFAULT: '#f59e0b', dark: '#d97706', light: '#fbbf24', glow: 'rgba(245, 158, 11, 0.15)' },
+            dark: { bg: '#050506', surface: '#0A0A0C', card: '#111114', border: '#222228', hover: '#1A1A1E' },
+            'fp-bg': 'var(--fp-bg)', 'fp-surface': 'var(--fp-surface-solid)', 'fp-accent': 'var(--fp-accent)', 'fp-muted': 'var(--fp-muted)',
+          },
+          backgroundImage: { 'hero-glow': 'radial-gradient(circle at 70% 50%, rgba(245,158,11,0.08) 0%, rgba(5,5,6,1) 60%)' },
+          animation: { float: 'float 6s ease-in-out infinite', 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
+          keyframes: { float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } } },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="forexpulse-styles.css">
+</head>
+<body class="min-h-screen antialiased fp-app-body fp-404-page">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="fp-app-layout">
+    <aside class="fp-sidebar fp-sidebar--collapsed" id="fp-sidebar">
+      <button type="button" class="fp-sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+        <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+        </svg>
+      </button>
+      <a href="index.html" class="fp-sidebar-brand" aria-label="ForexPulse home"><span class="nav-label">ForexPulse</span></a>
+      <button type="button" class="fp-sidebar-search fp-search-trigger w-full text-left" aria-label="Search pairs">
+        <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <span class="nav-label">Search</span>
+      </button>
+      <nav class="fp-sidebar-nav" aria-label="Main navigation">
+        <p class="fp-nav-group-title"><span class="nav-label">Navigation</span></p>
+        <a href="home.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="pairs.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          <span class="nav-label">All Pairs</span>
+        </a>
+        <a href="dashboard.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="tools.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="nav-label">Tools</span>
+        </a>
+        <a href="auth.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          <span class="nav-label">Sign in</span>
+        </a>
+        <a href="auth.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span class="nav-label">Admin</span>
+        </a>
+      </nav>
+      <div class="fp-sidebar-footer">
+        <a href="FAQ.html">
+          <svg class="w-4 h-4 flex-shrink-0 nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span class="nav-label">Help Center</span>
+        </a>
+      </div>
+    </aside>
+    <div class="fp-main">
+      <header class="fp-topbar">
+        <div class="fp-topbar-left">
+          <button type="button" class="fp-search-trigger flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style="background: var(--fp-dark-400); border: 1px solid var(--fp-border); color: var(--fp-muted);" aria-label="Search pairs"><i class="fa-solid fa-magnifying-glass text-xs"></i> Search</button>
+        </div>
+        <div class="fp-topbar-right">
+          <a href="auth.html" class="text-sm font-medium" style="color: var(--fp-accent);">Sign in</a>
+        </div>
+      </header>
+      <main id="main-content" class="main-container py-12 md:py-16 flex-1 flex items-center justify-center">
+        <section class="w-full text-center max-w-xl mx-auto fp-404-content">
+          <a href="index.html" class="inline-block mb-8 text-xl font-bold tracking-tight" style="color: var(--fp-foreground);"><span style="color: var(--fp-accent);">Forex</span>Pulse</a>
+          <div class="fp-404-icon mb-6" aria-hidden="true"><i class="fa-solid fa-circle-exclamation text-5xl md:text-6xl" style="color: var(--fp-muted);"></i></div>
+          <p class="text-6xl md:text-7xl font-bold mb-2" style="color: var(--fp-accent);">404</p>
+          <h1 class="text-2xl md:text-3xl font-semibold mb-2" style="color: var(--fp-foreground);">Page not found</h1>
+          <p class="text-base mb-6" style="color: var(--fp-muted);">The page you're looking for doesn't exist or has been moved.</p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a href="home.html" class="fp-btn-primary inline-flex items-center justify-center px-5 py-2.5 text-decoration-none">Back to Home</a>
+            <a href="home.html" class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-sm font-medium border transition-colors" style="border-color: var(--fp-border); color: var(--fp-foreground);">Go to app</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer class="fp-footer">
+    <div class="inner">
+      <a href="index.html" class="brand">ForexPulse</a>
+      <nav class="links" aria-label="Footer navigation">
+        <a href="home.html">Home</a>
+        <a href="pairs.html">All Pairs</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="tools.html">Tools</a>
+        <a href="FAQ.html">Help Center</a>
+        <a href="auth.html" id="footer-signin" style="display: none;">Sign in</a>
+      </nav>
+      <span class="copy">© 2025 ForexPulse</span>
+    </div>
+  </footer>
+  <script src="auth.js"></script>
+  <script src="search-modal.js"></script>
+  <script>
+    (function () {
+      var footerSignin = document.getElementById('footer-signin');
+      if (!footerSignin || !window.getCurrentUser) return;
+      if (window.getCurrentUser()) footerSignin.style.display = 'none';
+      else footerSignin.style.display = '';
+    })();
+  </script>
+  <script>
+    document.querySelectorAll('.fp-search-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (window.ForexPulseSearchModal && window.ForexPulseSearchModal.open) window.ForexPulseSearchModal.open();
+      });
+    });
+  </script>
+<script>
+(function () {
+  var sidebar = document.getElementById('fp-sidebar');
+  var toggleBtn = document.getElementById('sidebar-toggle');
+  var SIDEBAR_KEY = 'sidebarCollapsed';
+  function applySidebarState() {
+    if (sessionStorage.getItem('fp-sidebar-open-after-login') === '1') {
+      sessionStorage.removeItem('fp-sidebar-open-after-login');
+      localStorage.setItem(SIDEBAR_KEY, 'false');
+      if (sidebar) sidebar.classList.remove('fp-sidebar--collapsed');
+      return;
+    }
+    if (localStorage.getItem(SIDEBAR_KEY) === 'true') {
+      sidebar.classList.add('fp-sidebar--collapsed');
+    } else {
+      sidebar.classList.remove('fp-sidebar--collapsed');
+    }
+  }
+  if (sidebar && toggleBtn) {
+    applySidebarState();
+    toggleBtn.addEventListener('click', function () {
+      var isCollapsed = sidebar.classList.toggle('fp-sidebar--collapsed');
+      localStorage.setItem(SIDEBAR_KEY, isCollapsed);
+    });
+  }
+})();
+</script>
+</body>
+</html>

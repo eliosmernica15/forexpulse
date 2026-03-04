@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ForexPulse — Sign in or create an account.">
+  <title>Sign in — ForexPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: {
+            brand: { DEFAULT: '#f59e0b', dark: '#d97706', light: '#fbbf24', glow: 'rgba(245, 158, 11, 0.15)' },
+            dark: { bg: '#050506', surface: '#0A0A0C', card: '#111114', border: '#222228', hover: '#1A1A1E' },
+            'fp-bg': 'var(--fp-bg)', 'fp-surface': 'var(--fp-surface-solid)', 'fp-accent': 'var(--fp-accent)', 'fp-muted': 'var(--fp-muted)',
+          },
+          backgroundImage: { 'hero-glow': 'radial-gradient(circle at 70% 50%, rgba(245,158,11,0.08) 0%, rgba(5,5,6,1) 60%)' },
+          animation: { float: 'float 6s ease-in-out infinite', 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
+          keyframes: { float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } } },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="forexpulse-styles.css">
+  <style>
+    /* Landing-aligned: bg-dots and hero glow */
+    .fp-auth-main { background-color: #050506; position: relative; }
+    .fp-auth-main::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; z-index: 0; }
+    .fp-auth-main .auth-section { position: relative; z-index: 1; }
+    .fp-auth-hero-glow { position: absolute; top: -20%; right: -20%; width: 80vw; max-width: 500px; height: 80vw; max-height: 500px; background: rgba(245,158,11,0.06); border-radius: 50%; pointer-events: none; z-index: 0; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .auth-card { animation: cardIn 0.5s ease-out forwards; }
+    /* Landing-style inputs: border, focus ring */
+    .auth-input {
+      background: #1a1a1f !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      border-radius: 0.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .auth-input:focus { outline: none; border-color: var(--fp-accent) !important; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+    .auth-input::placeholder { color: var(--fp-muted); opacity: 0.7; }
+    .auth-tab.active,
+    .auth-tab.bg-orange { background: var(--fp-gradient-active) !important; color: #fff !important; }
+    .auth-tab:not(.active).text-gray-500 { color: var(--fp-muted) !important; }
+    /* Auth tabs — landing nav-pill style */
+    .auth-nav-pill { background: #0f0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 9999px; padding: 0.375rem 0.5rem; display: flex; gap: 0.125rem; width: 100%; }
+    .auth-nav-pill .auth-tab { border-radius: 9999px; padding: 0.5rem 1.125rem; font-size: 0.8125rem; font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+    .auth-nav-pill .auth-tab:not(.active):hover { color: #f59e0b; }
+    .auth-nav-pill .auth-tab.active { background: rgba(255,255,255,0.1) !important; color: #fff !important; box-shadow: none !important; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .admin-tab { transition: all 0.2s ease; }
+    .admin-tab:hover { background: var(--fp-dark-400); color: var(--fp-accent); }
+    .admin-tab.active { background: var(--fp-gradient-active); color: #fff; border-color: transparent; }
+    .admin-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .admin-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.3); }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; animation: fadeIn 0.3s ease forwards; }
+    .admin-table tbody tr:hover { background: var(--fp-dark-400); }
+    .tab-btn.active, .tab-btn.bg-white { background: var(--fp-gradient-active) !important; color: #fff !important; box-shadow: none; border-color: transparent; }
+    .tab-btn:not(.active):not(.bg-white) { color: var(--fp-muted); }
+    #admin-dashboard input::placeholder { color: var(--fp-muted); opacity: 0.7; }
+    /* Landing-style primary CTA */
+    .auth-btn-primary { background: #f59e0b; color: #000; font-weight: 700; border-radius: 9999px; padding: 0.875rem 1.5rem; font-size: 0.875rem; transition: opacity 0.2s; min-height: 48px; }
+    .auth-btn-primary:hover { opacity: 0.9; }
+    /* Admin dashboard — landing-aligned layout and visuals */
+    #admin-dashboard { background-color: #050506; }
+    #admin-dashboard .admin-dash-bg { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 24px 24px; }
+    .admin-section-badge { font-size: 0.625rem; font-weight: 700; letter-spacing: 0.2em; color: var(--fp-muted); background: var(--fp-dark-400); border: 1px solid var(--fp-border); padding: 0.375rem 1rem; border-radius: 9999px; }
+    .admin-card-landing { background: #111114; border: 1px solid #222228; border-radius: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+    .admin-card-landing:hover { border-color: rgba(245,158,11,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+    .admin-icon-box { width: 3rem; height: 3rem; border-radius: 1rem; background: var(--fp-dark-400); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--fp-accent); }
+    .admin-logout-btn { background: transparent; border: 1px solid #222228; color: #f8fafc; font-weight: 500; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; transition: border-color 0.2s, background 0.2s; }
+    .admin-logout-btn:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+    /* Analytics / System metric cards */
+    .admin-metric-value { font-size: 1.75rem; font-weight: 700; color: var(--fp-foreground); letter-spacing: -0.02em; }
+    .admin-metric-value.accent { color: var(--fp-accent); }
+    .admin-metric-value.success { color: #22c55e; }
+    .admin-status-dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; }
+    .admin-status-dot.ok { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+    .admin-status-dot.warn { background: #eab308; box-shadow: 0 0 8px rgba(234,179,8,0.4); }
+    /* Announcements list + form */
+    .admin-announce-item { border: 1px solid #222228; border-radius: 0.75rem; padding: 1rem 1.25rem; transition: border-color 0.2s, background 0.2s; }
+    .admin-announce-item:hover { border-color: rgba(245,158,11,0.2); background: rgba(255,255,255,0.02); }
+    .admin-tabs-wrap { width: fit-content; max-width: 100%; }
+    .admin-tabs-wrap .fp-segment-group { flex-wrap: wrap; width: fit-content; max-width: 100%; gap: 0.25rem; }
+    .admin-toggle-bg { background: #1a1a1f; border: 1px solid #222228; }
+    .admin-toggle-bg::after { box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    #admin-maintenance-toggle:checked + .admin-toggle-bg { border-color: rgba(245,158,11,0.4); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased fp-app-body fp-auth-page">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="fp-app-layout fp-auth-layout">
+    <main id="main-content" class="fp-auth-main flex-1 flex flex-col min-h-screen">
+  <div class="fp-auth-hero-glow" aria-hidden="true"></div>
+  <div class="w-full flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-16 auth-section">
+    <div id="admin-login" class="flex-1 flex flex-col items-center justify-center w-full max-w-lg">
+    <div class="w-full max-w-md mx-auto">
+    <!-- Landing-style header: badge + title + subtitle -->
+    <div class="text-center mb-8 sm:mb-10">
+      <div class="inline-flex items-center gap-2 bg-[#111114] border border-white/[0.08] rounded-full px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs text-gray-300 mb-6">
+        <i class="fa-solid fa-user text-brand"></i>
+        <span class="pl-2 border-l border-[#222228]">Account</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
+        <span class="text-white">Forex</span><span class="text-gradient">Pulse</span>
+      </h1>
+      <p class="text-sm sm:text-base mt-2 text-gray-400 leading-relaxed">Sign in or create an account to save your portfolio and settings.</p>
+    </div>
+
+    <!-- Landing-style card: dark-card, rounded-2xl, border -->
+    <div class="auth-card bg-[#111114] border border-[#222228] rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:border-amber-500/20 transition-colors duration-300">
+      <!-- Nav-pill style tabs (landing) -->
+      <div class="auth-nav-pill mb-5">
+        <button type="button" id="tab-user" class="auth-tab flex-1" data-role="user">User</button>
+        <button type="button" id="tab-admin" class="auth-tab flex-1" data-role="admin">Admin</button>
+      </div>
+      <div id="user-subtabs" class="mb-6">
+        <div class="auth-nav-pill">
+          <button type="button" id="tab-login" class="auth-tab flex-1 active" data-mode="login">Sign in</button>
+          <button type="button" id="tab-register" class="auth-tab flex-1" data-mode="register">Register</button>
+        </div>
+      </div>
+      <input type="hidden" id="login-role" value="user">
+
+      <form id="form-login" class="auth-form" method="post" action="#" onsubmit="event.preventDefault(); return false;">
+        <div class="space-y-5">
+          <div>
+            <label for="login-email" class="block text-sm font-medium mb-2 text-gray-400">Email</label>
+            <input type="email" id="login-email" name="email" required autocomplete="email" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="you@example.com">
+          </div>
+          <div>
+            <label for="login-password" class="block text-sm font-medium mb-2 text-gray-400">Password</label>
+            <div class="relative">
+              <input type="password" id="login-password" name="password" required autocomplete="current-password" class="auth-input w-full px-4 py-3 pr-11 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="••••••••">
+              <button type="button" id="login-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-gray-400 hover:text-brand transition-colors" aria-label="Show password">
+                <svg id="login-password-show" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <svg id="login-password-hide" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="login-remember-row" class="flex items-center gap-2.5">
+            <input type="checkbox" id="login-remember" name="remember" checked class="rounded focus:ring-2 border-[#222228] accent-amber-500">
+            <label for="login-remember" class="text-sm text-gray-400">Remember me</label>
+          </div>
+          <p id="login-error" class="text-sm hidden text-red-400"></p>
+          <button type="submit" class="w-full auth-btn-primary">Sign in</button>
+          <p id="login-forgot-row" class="text-center pt-1">
+            <button type="button" id="forgot-password-link" class="text-sm text-amber-400 hover:underline transition-colors">Forgot password?</button>
+          </p>
+        </div>
+      </form>
+
+      <form id="form-register" class="auth-form hidden" method="post" action="#" onsubmit="event.preventDefault(); return false;">
+        <div class="space-y-5">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="register-name" class="block text-sm font-medium mb-2 text-gray-400">Name</label>
+              <input type="text" id="register-name" name="name" required autocomplete="name" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="Your name">
+            </div>
+            <div>
+              <label for="register-email" class="block text-sm font-medium mb-2 text-gray-400">Email</label>
+              <input type="email" id="register-email" name="email" required autocomplete="email" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="you@example.com">
+            </div>
+          </div>
+          <div>
+            <label for="register-password" class="block text-sm font-medium mb-2 text-gray-400">Password <span class="text-gray-500 font-normal">(min 6 characters)</span></label>
+            <div class="relative">
+              <input type="password" id="register-password" name="password" required autocomplete="new-password" minlength="6" class="auth-input w-full px-4 py-3 pr-11 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="••••••••">
+              <button type="button" id="register-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-gray-400 hover:text-brand transition-colors" aria-label="Show password">
+                <svg id="register-password-show" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <svg id="register-password-hide" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+              </button>
+            </div>
+          </div>
+          <p id="password-strength" class="text-xs mt-1 hidden text-gray-500"></p>
+          <p id="register-error" class="text-sm hidden text-red-400"></p>
+          <button type="submit" class="w-full auth-btn-primary">Create account</button>
+        </div>
+      </form>
+
+      <div id="forgot-password-panel" class="auth-form hidden">
+        <div class="space-y-5">
+          <p class="text-base font-medium text-white">Reset your password</p>
+          <div id="forgot-step1">
+            <label for="forgot-email" class="block text-sm font-medium mb-2 text-gray-400">Email</label>
+            <input type="email" id="forgot-email" autocomplete="email" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="you@example.com">
+            <p id="forgot-step1-error" class="text-sm mt-2 hidden text-red-400"></p>
+            <button type="button" id="forgot-continue-btn" class="w-full auth-btn-primary mt-5">Continue</button>
+          </div>
+          <div id="forgot-step2" class="hidden space-y-5">
+            <div>
+              <label for="forgot-new-password" class="block text-sm font-medium mb-2 text-gray-400">New password <span class="text-gray-500 font-normal">(min 6 characters)</span></label>
+              <input type="password" id="forgot-new-password" autocomplete="new-password" minlength="6" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="••••••••">
+            </div>
+            <div>
+              <label for="forgot-confirm-password" class="block text-sm font-medium mb-2 text-gray-400">Confirm new password</label>
+              <input type="password" id="forgot-confirm-password" autocomplete="new-password" minlength="6" class="auth-input w-full px-4 py-3 rounded-xl text-[var(--fp-foreground)] focus:outline-none" placeholder="••••••••">
+            </div>
+            <p id="forgot-step2-error" class="text-sm hidden text-red-400"></p>
+            <button type="button" id="forgot-reset-btn" class="w-full auth-btn-primary">Reset password</button>
+          </div>
+          <p class="text-center pt-2">
+            <button type="button" id="forgot-back-link" class="text-sm text-gray-400 hover:underline transition-colors">← Back to Sign in</button>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center mt-8">
+      <a href="index.html" class="text-sm text-gray-400 hover:text-white hover:underline transition-colors">← Back to landing</a>
+    </p>
+  </div>
+    </div>
+
+    <div id="admin-dashboard" class="hidden flex-1 flex flex-col w-full min-h-0">
+      <div class="admin-dash-bg absolute inset-0 pointer-events-none z-0"></div>
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-10 flex flex-col flex-1">
+        <!-- Header: logo-style title + sign out (landing-style) -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <a href="index.html" class="flex items-center text-xl font-bold text-white hover:opacity-95 transition-opacity" aria-label="ForexPulse home">
+              <span class="text-white">Forex</span><span class="text-gradient">Pulse</span>
+            </a>
+            <span class="admin-section-badge hidden sm:inline-block">Admin</span>
+          </div>
+          <button type="button" id="admin-logout" class="admin-logout-btn">Sign out</button>
+        </div>
+        <div class="mb-2">
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Admin <span class="text-gradient">Dashboard</span></h1>
+          <p class="text-sm mt-1 text-gray-400">Manage users, settings, and view activity. Logged in as admin.</p>
+        </div>
+
+        <!-- Tabs (scrollable on small screens) -->
+        <nav class="admin-tabs-wrap mb-8" aria-label="Admin sections">
+          <div class="fp-segment-group">
+            <button type="button" class="admin-tab tab-btn fp-segment-btn active" data-tab="overview"><i class="fa-solid fa-chart-pie mr-2 text-xs opacity-80" aria-hidden="true"></i>Overview</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="analytics"><i class="fa-solid fa-chart-line mr-2 text-xs opacity-80" aria-hidden="true"></i>Analytics</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="users"><i class="fa-solid fa-users mr-2 text-xs opacity-80" aria-hidden="true"></i>Users</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="announcements"><i class="fa-solid fa-bullhorn mr-2 text-xs opacity-80" aria-hidden="true"></i>Announcements</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="settings"><i class="fa-solid fa-gear mr-2 text-xs opacity-80" aria-hidden="true"></i>Settings</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="system"><i class="fa-solid fa-server mr-2 text-xs opacity-80" aria-hidden="true"></i>System</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="reports"><i class="fa-solid fa-file-export mr-2 text-xs opacity-80" aria-hidden="true"></i>Reports</button>
+            <button type="button" class="admin-tab tab-btn fp-segment-btn" data-tab="activity"><i class="fa-solid fa-clock-rotate-left mr-2 text-xs opacity-80" aria-hidden="true"></i>Activity</button>
+          </div>
+        </nav>
+
+        <!-- Panel: Overview -->
+        <div id="panel-overview" class="admin-panel active flex-1">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-users text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Total users</h3>
+              <p id="stat-users" class="text-2xl sm:text-3xl font-bold text-white">0</p>
+              <p class="text-sm text-gray-400 mt-1">Registered accounts</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-link text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-3">Quick links</h3>
+              <ul class="space-y-2">
+                <li><a href="index.html" class="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-2">Landing page <i class="fa-solid fa-arrow-right text-xs opacity-80"></i></a></li>
+                <li><a href="dashboard.html" class="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-2">User dashboard <i class="fa-solid fa-arrow-right text-xs opacity-80"></i></a></li>
+                <li><a href="auth.html" class="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-2">Sign in / Register <i class="fa-solid fa-arrow-right text-xs opacity-80"></i></a></li>
+              </ul>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden sm:col-span-2 lg:col-span-1">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-shield-halved text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Admin</h3>
+              <p class="text-sm text-gray-400 mt-2">admin@forex.com</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
+            <div class="admin-card admin-card-landing p-5 sm:p-6 group relative overflow-hidden">
+              <div class="admin-icon-box mb-4 w-10 h-10"><i class="fa-solid fa-right-to-bracket text-sm"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">Sign-ins today</h3>
+              <p id="overview-signins-today" class="text-xl sm:text-2xl font-bold text-white">0</p>
+            </div>
+            <div class="admin-card admin-card-landing p-5 sm:p-6 group relative overflow-hidden">
+              <div class="admin-icon-box mb-4 w-10 h-10"><i class="fa-solid fa-user-plus text-sm text-green-400"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">New users today</h3>
+              <p id="overview-new-today" class="text-xl sm:text-2xl font-bold text-white">0</p>
+            </div>
+            <div class="admin-card-landing p-5 sm:p-6 sm:col-span-2 lg:col-span-2">
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-keyboard text-amber-400"></i> Recent logins
+              </h3>
+              <ul id="overview-recent-logins" class="space-y-2 max-h-32 overflow-y-auto"></ul>
+              <p id="overview-recent-logins-empty" class="text-sm text-gray-500">No recent logins.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel: Analytics -->
+        <div id="panel-analytics" class="admin-panel flex-1">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+            <div class="admin-card admin-card-landing p-6 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full -z-10"></div>
+              <div class="admin-icon-box mb-4"><i class="fa-solid fa-user-plus text-lg"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">Total sign-ups</h3>
+              <p id="analytics-total-signups" class="admin-metric-value">0</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-bl-full -z-10"></div>
+              <div class="admin-icon-box mb-4"><i class="fa-solid fa-bolt text-lg text-green-400"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">New this week</h3>
+              <p id="analytics-new-week" class="admin-metric-value success">0</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full -z-10"></div>
+              <div class="admin-icon-box mb-4"><i class="fa-solid fa-file-lines text-lg"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">Activity events</h3>
+              <p id="analytics-activity-count" class="admin-metric-value accent">0</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full -z-10"></div>
+              <div class="admin-icon-box mb-4"><i class="fa-solid fa-bullhorn text-lg"></i></div>
+              <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-1">Announcements</h3>
+              <p id="analytics-announcements" class="admin-metric-value">0</p>
+            </div>
+          </div>
+          <div class="admin-card-landing p-6 sm:p-8">
+            <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-user-clock text-amber-400"></i> Recent sign-ups
+            </h2>
+            <div id="analytics-recent-wrap" class="overflow-x-auto rounded-xl border border-[#222228]">
+              <table class="fp-table w-full text-left">
+                <thead class="bg-[#1a1a1f]">
+                  <tr class="border-b border-[#222228]">
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Name</th>
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Email</th>
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Joined</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-recent-tbody"></tbody>
+              </table>
+            </div>
+            <p id="analytics-recent-empty" class="text-sm py-6 text-center text-gray-500 border border-[#222228] rounded-xl">No sign-ups yet.</p>
+          </div>
+        </div>
+
+        <!-- Panel: Users -->
+        <div id="panel-users" class="admin-panel flex-1">
+          <div class="admin-card-landing overflow-hidden p-0">
+            <div class="px-4 sm:px-6 py-4 border-b border-[#222228] flex flex-wrap items-center justify-between gap-3">
+              <h2 class="text-lg font-semibold text-white">Manage users</h2>
+              <div class="flex flex-wrap items-center gap-2">
+                <input type="text" id="users-search" placeholder="Search by name or email…" class="px-3 py-2 rounded-xl border text-sm w-44 sm:w-56 max-w-full focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all bg-[#1a1a1f] border-[#222228] text-white placeholder-gray-500">
+                <button type="button" id="users-export" class="px-4 py-2 rounded-xl text-sm font-medium border border-[#222228] text-gray-200 hover:border-amber-500/30 hover:text-amber-400 transition-colors">Export CSV</button>
+                <button type="button" id="users-refresh" class="fp-btn-primary px-4 py-2 text-sm">Refresh</button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="fp-table w-full text-left admin-table">
+                <thead>
+                  <tr class="border-b border-[#222228] bg-[#1a1a1f]">
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Name</th>
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Email</th>
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Joined</th>
+                    <th class="px-4 sm:px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-400">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody"></tbody>
+              </table>
+            </div>
+            <p id="users-empty" class="px-6 py-10 text-center hidden text-gray-500">No users yet.</p>
+          </div>
+        </div>
+
+        <!-- Panel: Announcements -->
+        <div id="panel-announcements" class="admin-panel flex-1">
+          <div class="grid lg:grid-cols-[1fr,340px] gap-6 lg:gap-8">
+            <div class="admin-card-landing p-6 sm:p-8">
+              <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-bullhorn text-amber-400"></i> Active announcements
+              </h2>
+              <ul id="announcements-list" class="space-y-3"></ul>
+              <p id="announcements-empty" class="text-sm py-6 text-center text-gray-500">No announcements. Add one below.</p>
+            </div>
+            <div class="admin-card-landing p-6 sm:p-8 h-fit">
+              <h2 class="text-lg font-semibold text-white mb-4">New announcement</h2>
+              <form id="announcement-form" class="space-y-4">
+                <div>
+                  <label for="announce-title" class="block text-sm font-medium mb-2 text-gray-400">Title</label>
+                  <input type="text" id="announce-title" required maxlength="120" placeholder="e.g. Scheduled maintenance" class="w-full px-4 py-2.5 rounded-xl border border-[#222228] bg-[#1a1a1f] text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20">
+                </div>
+                <div>
+                  <label for="announce-body" class="block text-sm font-medium mb-2 text-gray-400">Message</label>
+                  <textarea id="announce-body" rows="3" placeholder="Brief message for users…" class="w-full px-4 py-2.5 rounded-xl border border-[#222228] bg-[#1a1a1f] text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 resize-y min-h-[80px]"></textarea>
+                </div>
+                <div>
+                  <label for="announce-until" class="block text-sm font-medium mb-2 text-gray-400">Show until (optional)</label>
+                  <input type="date" id="announce-until" class="w-full px-4 py-2.5 rounded-xl border border-[#222228] bg-[#1a1a1f] text-white focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20">
+                </div>
+                <button type="submit" class="fp-btn-primary w-full py-2.5 text-sm">Add announcement</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel: Settings -->
+        <div id="panel-settings" class="admin-panel">
+          <div class="admin-card-landing p-6 sm:p-8 max-w-xl">
+            <div class="admin-icon-box mb-6 inline-flex">
+              <i class="fa-solid fa-gear text-lg"></i>
+            </div>
+            <h2 class="text-lg font-semibold text-white mb-4">Settings</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-400">Site name</label>
+                <input type="text" id="admin-site-name" maxlength="64" placeholder="ForexPulse" class="w-full px-4 py-2.5 rounded-xl border border-[#222228] bg-[#1a1a1f] text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-400">Timezone</label>
+                <select id="admin-timezone" class="w-full px-4 py-2.5 rounded-xl border border-[#222228] bg-[#1a1a1f] text-white focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all">
+                  <option value="UTC">UTC</option>
+                  <option value="Europe/London">Europe/London</option>
+                  <option value="America/New_York">America/New_York</option>
+                </select>
+              </div>
+              <button type="button" id="admin-save-settings" class="fp-btn-primary px-5 py-2.5 text-sm">Save settings</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel: System -->
+        <div id="panel-system" class="admin-panel flex-1">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="admin-card admin-card-landing p-6 sm:p-8">
+              <div class="flex items-center justify-between mb-4">
+                <div class="admin-icon-box"><i class="fa-solid fa-plug text-lg"></i></div>
+                <span class="admin-status-dot ok" title="Operational"></span>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">API status</h3>
+              <p class="text-white font-semibold">Operational</p>
+              <p class="text-xs text-gray-500 mt-1">Forex rates & charts</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8">
+              <div class="flex items-center justify-between mb-4">
+                <div class="admin-icon-box"><i class="fa-solid fa-database text-lg"></i></div>
+                <span class="admin-status-dot ok" title="Synced"></span>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Data</h3>
+              <p class="text-white font-semibold">Local storage</p>
+              <p class="text-xs text-gray-500 mt-1">Users & activity in browser</p>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8 sm:col-span-2 lg:col-span-1">
+              <div class="flex items-center justify-between mb-4">
+                <div class="admin-icon-box"><i class="fa-solid fa-code-branch text-lg"></i></div>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Version</h3>
+              <p class="text-white font-semibold">1.0.0</p>
+              <p class="text-xs text-gray-500 mt-1">ForexPulse Admin</p>
+            </div>
+          </div>
+          <div class="admin-card-landing p-6 sm:p-8 mt-6">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <div class="flex items-center gap-3">
+                <div class="admin-icon-box"><i class="fa-solid fa-screwdriver-wrench text-lg"></i></div>
+                <div>
+                  <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-0.5">Maintenance mode</h3>
+                  <p class="text-xs text-gray-500">When on, users see a maintenance banner on Dashboard and Home.</p>
+                </div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="admin-maintenance-toggle" class="sr-only peer">
+                <span class="admin-toggle-bg w-11 h-6 rounded-full peer peer-checked:bg-amber-500/80 peer-focus:ring-2 peer-focus:ring-amber-500/30 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></span>
+                <span id="admin-maintenance-label" class="ml-3 text-sm font-medium text-gray-400">Off</span>
+              </label>
+            </div>
+          </div>
+          <div class="admin-card-landing p-6 sm:p-8 mt-6 max-w-2xl">
+            <h2 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-circle-info text-amber-400"></i> About
+            </h2>
+            <p class="text-sm text-gray-400 leading-relaxed">This admin dashboard uses local storage for users and activity. For production, connect to a backend and replace mock system status with real health checks.</p>
+          </div>
+        </div>
+
+        <!-- Panel: Reports -->
+        <div id="panel-reports" class="admin-panel flex-1">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-file-csv text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Activity log</h3>
+              <p class="text-sm text-gray-400 mb-4">Export the full activity log as CSV.</p>
+              <button type="button" id="reports-export-activity" class="fp-btn-primary px-4 py-2.5 text-sm w-full sm:w-auto">Export CSV</button>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-database text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Full data snapshot</h3>
+              <p class="text-sm text-gray-400 mb-4">Export users, announcements, settings & activity as JSON.</p>
+              <button type="button" id="reports-export-json" class="fp-btn-primary px-4 py-2.5 text-sm w-full sm:w-auto">Export JSON</button>
+            </div>
+            <div class="admin-card admin-card-landing p-6 sm:p-8 group relative overflow-hidden sm:col-span-2 lg:col-span-1">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700 -z-10"></div>
+              <div class="admin-icon-box mb-6 group-hover:-translate-y-1 transition-transform">
+                <i class="fa-solid fa-users text-lg"></i>
+              </div>
+              <h3 class="text-sm font-medium uppercase tracking-wider text-gray-400 mb-1">Users list</h3>
+              <p class="text-sm text-gray-400 mb-4">Same as the Users tab export.</p>
+              <button type="button" id="reports-export-users" class="fp-btn-primary px-4 py-2.5 text-sm w-full sm:w-auto">Export users CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel: Activity -->
+        <div id="panel-activity" class="admin-panel">
+          <div class="admin-card-landing p-6 sm:p-8 max-w-2xl">
+            <div class="admin-icon-box mb-6 inline-flex">
+              <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+            </div>
+            <h2 class="text-lg font-semibold text-white mb-4">Recent activity</h2>
+            <ul id="activity-list" class="space-y-0 divide-y divide-[#222228] rounded-b-xl overflow-hidden"></ul>
+            <p id="activity-empty" class="text-sm mt-4 text-gray-500">No activity yet.</p>
+          </div>
+        </div>
+
+        <p class="text-center mt-10">
+          <a href="index.html" class="text-sm text-gray-400 hover:text-white hover:underline transition-colors">← Back to landing</a>
+        </p>
+      </div>
+    </div>
+  </div>
+    </main>
+  </div>
+
+  <script src="utils.js"></script>
+  <script src="pairs.js"></script>
+  <script src="admin.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    (function () {
+      if (window.isAdminLoggedIn && window.isAdminLoggedIn()) {
+        if (document.getElementById('admin-login') && document.getElementById('admin-dashboard')) {
+          window.showAdminDashboard();
+        }
+        return;
+      }
+      if (window.getCurrentUser && window.getCurrentUser()) {
+        var user = window.getCurrentUser();
+        if (user && user.role !== 'admin') window.location.replace('home.html');
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var tabUser = document.getElementById('tab-user');
+      var tabAdmin = document.getElementById('tab-admin');
+      var userSubtabs = document.getElementById('user-subtabs');
+      var tabLogin = document.getElementById('tab-login');
+      var tabRegister = document.getElementById('tab-register');
+      var formLogin = document.getElementById('form-login');
+      var formRegister = document.getElementById('form-register');
+      var loginRoleInput = document.getElementById('login-role');
+
+      function setRole(role) {
+        if (tabUser) tabUser.classList.toggle('active', role === 'user');
+        if (tabAdmin) tabAdmin.classList.toggle('active', role === 'admin');
+        if (userSubtabs) userSubtabs.classList.toggle('hidden', role === 'admin');
+        if (loginRoleInput) loginRoleInput.value = role;
+        var rememberRow = document.getElementById('login-remember-row');
+        var forgotRow = document.getElementById('login-forgot-row');
+        if (rememberRow) rememberRow.classList.toggle('hidden', role === 'admin');
+        if (forgotRow) forgotRow.classList.toggle('hidden', role === 'admin');
+        if (role === 'admin') {
+          if (formLogin) formLogin.classList.remove('hidden');
+          if (formRegister) formRegister.classList.add('hidden');
+        } else {
+          setUserMode(window._authUserMode || 'login');
+        }
+      }
+
+      function setUserMode(mode) {
+        window._authUserMode = mode;
+        if (tabLogin) tabLogin.classList.toggle('active', mode === 'login');
+        if (tabRegister) tabRegister.classList.toggle('active', mode === 'register');
+        if (formLogin) formLogin.classList.toggle('hidden', mode === 'register');
+        if (formRegister) formRegister.classList.toggle('hidden', mode !== 'register');
+      }
+
+      if (tabUser) tabUser.addEventListener('click', function () { setRole('user'); });
+      if (tabAdmin) tabAdmin.addEventListener('click', function () { setRole('admin'); });
+      if (tabLogin) tabLogin.addEventListener('click', function () { setUserMode('login'); });
+      if (tabRegister) tabRegister.addEventListener('click', function () { setUserMode('register'); });
+    })();
+  </script>
+</body>
+</html>

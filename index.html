@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ForexPulse — Professional forex charts, live pairs, and trading tools. View rates, sessions, and open your dashboard.">
+    <title>ForexPulse — Trading Platform</title>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"ForexPulse","description":"Professional forex charts, live pairs, and trading tools.","url":"./index.html","applicationCategory":"FinanceApplication"}
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="forexpulse-styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            DEFAULT: '#f59e0b',
+                            dark: '#d97706',
+                            light: '#fbbf24',
+                            glow: 'rgba(245, 158, 11, 0.15)'
+                        },
+                        dark: {
+                            bg: '#050506',
+                            surface: '#0A0A0C',
+                            card: '#111114',
+                            border: '#222228',
+                            hover: '#1A1A1E'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-glow': 'radial-gradient(circle at 70% 50%, rgba(245,158,11,0.08) 0%, rgba(5,5,6,1) 60%)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050506; color: #ffffff; -webkit-font-smoothing: antialiased; }
+        .bg-dots {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .bg-dots-amber {
+            background-image: radial-gradient(rgba(245, 158, 11, 0.15) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .glass-panel {
+            background: rgba(17, 17, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #050506; }
+        ::-webkit-scrollbar-thumb { background: #222228; border-radius: 4px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .faq-grid { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; }
+        .faq-grid.is-open { grid-template-rows: 1fr; }
+        .faq-inner { overflow: hidden; }
+        .iso-container {
+            transform: perspective(1000px) rotateX(60deg) rotateZ(-45deg);
+            transform-style: preserve-3d;
+        }
+        #mobile-menu { display: none; }
+        #mobile-menu.is-open { display: flex; }
+        .fp-logo {
+            letter-spacing: 0.02em;
+            font-weight: 700;
+        }
+        .fp-logo .logo-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            flex-shrink: 0;
+        }
+        .fp-logo .logo-wordmark { margin-left: 0.5rem; }
+        .fp-logo .logo-wordmark .logo-accent { color: #f59e0b; }
+        .fp-logo:hover .logo-wordmark .logo-accent { color: #fbbf24; }
+        .fp-logo.logo-lg .logo-icon {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+        .fp-logo.logo-lg .logo-wordmark { margin-left: 0.625rem; }
+        .nav-pill {
+            background: #0f0f12;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 9999px;
+            padding: 0.375rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.125rem;
+        }
+        .nav-pill a {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.5rem 1.125rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .nav-pill a:hover:not(.nav-active) {
+            color: #f59e0b;
+        }
+        .nav-pill a.nav-active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        /* Override global .hidden so nav/buttons show at sm+ (global .hidden uses !important) */
+        .landing-nav-desktop {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            .landing-nav-desktop {
+                display: flex !important;
+            }
+        }
+        .landing-nav-mobile {
+            display: flex;
+        }
+        @media (min-width: 640px) {
+            .landing-nav-mobile {
+                display: none !important;
+            }
+        }
+        /* Hide mobile dropdown on desktop; JS toggles visibility on small screens */
+        @media (min-width: 640px) {
+            .landing-mobile-menu-panel {
+                display: none !important;
+            }
+        }
+        /* Scroll margin so fixed header doesn’t cover section when scrolling from nav */
+        [id="main-hero"], [id="why"], [id="platform"], [id="process"], [id="get-started"], [id="benefits"], [id="reviews"], [id="faq"] {
+            scroll-margin-top: 6rem;
+        }
+        /* Landing account dropdown */
+        .landing-account-panel a, .landing-account-panel button {
+            display: flex; align-items: center; gap: 0.5rem; width: 100%; padding: 0.5rem 1rem; font-size: 0.875rem; color: rgba(248,250,252,0.95); background: none; border: none; cursor: pointer; text-decoration: none; text-align: left; transition: background 0.15s;
+        }
+        .landing-account-panel a:hover, .landing-account-panel button:hover { background: rgba(255,255,255,0.06); }
+        .landing-account-panel .dropdown-divider { height: 1px; margin: 0.25rem 0; background: #222228; }
+        #mobile-account-menu a { padding: 0.5rem 0; border-radius: 0.5rem; color: rgba(248,250,252,0.95); }
+        #mobile-account-menu a:hover { color: #f59e0b; }
+        #mobile-account-menu a.sign-out { color: #f59e0b; }
+        .landing-account-panel a.landing-logout-btn { color: #f59e0b; }
+        /* Hero CTA — Go to app */
+        .hero-cta-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #050506;
+            font-weight: 700;
+            padding: 0.875rem 1.75rem;
+            border-radius: 9999px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .hero-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+            filter: brightness(1.05);
+        }
+        .hero-cta-btn .hero-cta-arrow {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            background: #050506;
+            color: #fbbf24;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            transition: transform 0.2s ease;
+        }
+        .hero-cta-btn:hover .hero-cta-arrow { transform: translateX(2px); }
+        /* Nav bar — Sign in */
+        .nav-signin-btn {
+            background: #111114;
+            color: #f8fafc;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 9999px;
+            border: 1px solid #222228;
+            transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-signin-btn:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            color: #fbbf24;
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden relative antialiased">
+    <a href="#main-hero" class="skip-link">Skip to main content</a>
+
+    <div class="fixed inset-0 bg-dots z-[-1] pointer-events-none"></div>
+
+    <!-- Landing page only: pill navbar (dashboard/pairs/home use their own sidebar) -->
+    <header class="fixed w-full z-50 top-0 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 transition-all duration-300" id="header">
+        <div class="max-w-7xl mx-auto flex justify-between items-center gap-3 sm:gap-4">
+            <a href="index.html" class="fp-logo flex items-center text-lg sm:text-xl text-white flex-shrink-0 transition-colors duration-200 hover:opacity-95" aria-label="ForexPulse home">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12.5 1L10.5 10h4.5L8.5 23l2-10h-5L12.5 1z" fill="#f59e0b"/>
+                </svg>
+                <span class="logo-wordmark"><span class="text-white">Forex</span><span class="logo-accent transition-colors duration-200">Pulse</span></span>
+            </a>
+
+            <div class="landing-nav-desktop flex-1 justify-center min-w-0 px-2">
+                <nav class="nav-pill" aria-label="Landing sections">
+                    <a href="#main-hero" class="nav-active landing-section-link">Home</a>
+                    <a href="#why" class="landing-section-link">Why</a>
+                    <a href="#platform" class="landing-section-link">Platform</a>
+                    <a href="#process" class="landing-section-link">Process</a>
+                    <a href="#reviews" class="landing-section-link">Reviews</a>
+                    <a href="#faq" class="landing-section-link">FAQ</a>
+                </nav>
+            </div>
+
+            <div class="landing-nav-desktop items-center gap-3 flex-shrink-0">
+                <div id="header-auth-block" class="hidden relative">
+                    <button type="button" id="landing-account-trigger" class="landing-account-trigger flex items-center gap-3 px-3 py-2 rounded-xl border border-[#222228] bg-[#111114] hover:border-amber-500/30 transition-colors text-left min-w-0 max-w-[240px] sm:max-w-[280px]" aria-haspopup="true" aria-expanded="false" aria-label="Account menu">
+                        <span id="header-user-avatar" class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 bg-brand text-black" aria-hidden="true">—</span>
+                        <div class="min-w-0 flex-1 hidden sm:block">
+                            <span id="header-user-name" class="block text-sm font-medium text-white truncate">User</span>
+                            <span id="header-user-email" class="block text-xs text-gray-400 truncate">—</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="landing-account-panel" class="landing-account-panel absolute right-0 top-full mt-1.5 min-w-[180px] py-1 rounded-xl border border-[#222228] bg-[#111114] shadow-xl z-50 hidden" role="menu" aria-orientation="vertical">
+                        <div id="landing-account-menu"></div>
+                    </div>
+                </div>
+                <a href="auth.html" id="nav-signin" class="landing-guest-only nav-signin-btn">Sign in</a>
+            </div>
+
+            <div class="landing-nav-mobile items-center gap-2 z-10">
+                <a href="auth.html" id="nav-signin-mob" class="landing-guest-only nav-signin-btn">Sign in</a>
+                <button type="button" id="mobile-menu-btn" class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-300 hover:text-white rounded-lg" aria-label="Open menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars text-xl" id="mobile-menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="landing-mobile-menu-panel flex flex-col absolute top-full left-0 right-0 mt-2 mx-4 gap-1 bg-[#0d0d0f] border border-white/[0.08] rounded-2xl p-4 shadow-xl" aria-hidden="true">
+            <a href="#main-hero" class="landing-section-link px-4 py-3 rounded-xl text-white font-medium hover:bg-white/5 min-h-[44px] flex items-center">Home</a>
+            <a href="#why" class="landing-section-link px-4 py-3 rounded-xl text-gray-300 font-medium hover:bg-white/5 min-h-[44px] flex items-center">Why</a>
+            <a href="#platform" class="landing-section-link px-4 py-3 rounded-xl text-gray-300 font-medium hover:bg-white/5 min-h-[44px] flex items-center">Platform</a>
+            <a href="#process" class="landing-section-link px-4 py-3 rounded-xl text-gray-300 font-medium hover:bg-white/5 min-h-[44px] flex items-center">Process</a>
+            <a href="#reviews" class="landing-section-link px-4 py-3 rounded-xl text-gray-300 font-medium hover:bg-white/5 min-h-[44px] flex items-center">Reviews</a>
+            <a href="#faq" class="landing-section-link px-4 py-3 rounded-xl text-gray-300 font-medium hover:bg-white/5 min-h-[44px] flex items-center">FAQ</a>
+            <a href="auth.html" id="mobile-nav-signin" class="landing-guest-only px-4 py-3 rounded-xl text-brand font-medium hover:bg-white/5 min-h-[44px] flex items-center border-t border-dark-border mt-2 pt-4">Sign in</a>
+            <span id="mobile-auth-block" class="hidden px-4 py-3 border-t border-dark-border mt-2 pt-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <span id="mobile-user-avatar" class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 bg-brand text-black">—</span>
+                    <div class="min-w-0">
+                        <span id="mobile-user-name" class="block text-sm font-medium text-white"></span>
+                        <span id="mobile-user-email" class="block text-xs text-gray-400 truncate">—</span>
+                    </div>
+                </div>
+                <div id="mobile-account-menu" class="space-y-1"></div>
+            </span>
+        </div>
+    </header>
+
+    <section id="main-hero" class="relative pt-32 sm:pt-40 pb-16 md:pt-48 md:pb-32 px-4 sm:px-6 md:px-12 min-h-[90vh] sm:min-h-[95vh] flex items-center bg-hero-glow overflow-hidden">
+        <div class="absolute top-0 right-0 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] bg-[#f59e0b]/[0.06] rounded-full -z-10 translate-x-1/3 -translate-y-1/3"></div>
+
+        <div class="max-w-7xl mx-auto w-full relative z-10 flex flex-col items-center justify-center text-center">
+            <div class="space-y-6 sm:space-y-8 flex flex-col items-center max-w-3xl">
+                <div class="inline-flex items-center gap-2 bg-[#111114] border border-white/[0.08] rounded-full px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs text-gray-300">
+                    <i class="fa-solid fa-chart-line text-brand"></i>
+                    <span class="pl-2 border-l border-dark-border">Real-time rates & charts</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl md:text-[4rem] lg:text-[5rem] font-extrabold leading-[1.1] tracking-tight">
+                    Trading Platform For <span class="text-gradient">Forex</span> & Prop
+                </h1>
+
+                <p class="text-gray-400 text-base sm:text-lg md:text-xl max-w-lg leading-relaxed font-light">
+                    Real-time rates, charts, and tools. Built for traders. View pairs, convert currencies, and manage your dashboard in one place.
+                </p>
+
+                <div class="pt-4 sm:pt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+                    <a href="home.html" class="landing-guest-only hero-cta-btn min-h-[48px]">
+                        Go to app
+                        <span class="hero-cta-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                    </div>
+            </div>
+
+            <div class="relative h-[320px] sm:h-[400px] md:h-[500px] flex justify-center items-center perspective-[2000px] hidden md:flex mt-12 md:mt-16">
+                <div class="iso-container w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 relative animate-float">
+                    <div class="absolute inset-[-50%] border border-dark-border bg-dark-bg/50" style="transform: translateZ(-100px); background-image: linear-gradient(#222228 1px, transparent 1px), linear-gradient(90deg, #222228 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    <div class="absolute w-full h-full border border-[#f59e0b]/30 bg-[#f59e0b]/[0.08]  flex items-center justify-center" style="transform: translateZ(0px);">
+                        <i class="fa-solid fa-chart-line text-brand text-5xl md:text-6xl opacity-90"></i>
+                    </div>
+                    <div class="absolute w-3/4 h-3/4 border border-white/10 bg-white/5  top-[-20%] left-[40%]" style="transform: translateZ(60px);"></div>
+                    <div class="absolute w-1/2 h-1/2 border border-brand/50 bg-gradient-to-br from-brand/20 to-transparent  bottom-[-10%] left-[-10%]" style="transform: translateZ(120px);">
+                        <div class="absolute bottom-4 left-4 flex items-end gap-2 opacity-80">
+                            <div class="w-1.5 h-12 bg-green-500 relative"><div class="absolute w-0.5 h-16 bg-green-500 left-1/2 -translate-x-1/2 bottom-[-4px]"></div></div>
+                            <div class="w-1.5 h-24 bg-green-500 relative"><div class="absolute w-0.5 h-32 bg-green-500 left-1/2 -translate-x-1/2 bottom-[-8px]"></div></div>
+                            <div class="w-1.5 h-16 bg-red-500 relative"><div class="absolute w-0.5 h-20 bg-red-500 left-1/2 -translate-x-1/2 bottom-[-2px]"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why" class="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-20 flex flex-col items-center">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-surface border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Why Us</span>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">Why <span class="text-gradient">Forex</span>Pulse?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">A trading platform built for forex and prop. Live pairs, charts, converter, and dashboard in one place.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 hover:border-brand/30 transition-all duration-500 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-dark-surface border border-white/5 flex items-center justify-center mb-6 group-hover:-translate-y-2 transition-transform duration-300 shadow-lg">
+                        <i class="fa-solid fa-coins text-brand text-lg sm:text-xl"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-white">Live rates & pairs</h3>
+                    <p class="text-gray-400 text-sm mb-6 sm:mb-8 leading-relaxed font-light">View real-time forex rates and browse all major and minor pairs. Track movement and open detailed charts.</p>
+                    <a href="pairs.html" class="text-sm font-medium text-white inline-flex items-center gap-2 group-hover:text-brand transition-colors">View Pairs <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i></a>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 hover:border-brand/30 transition-all duration-500 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-dark-surface border border-white/5 flex items-center justify-center mb-6 group-hover:-translate-y-2 transition-transform duration-300 shadow-lg relative">
+                        <i class="fa-solid fa-calculator text-brand text-lg sm:text-xl relative z-10"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-white">Charts & converter</h3>
+                    <p class="text-gray-400 text-sm mb-6 sm:mb-8 leading-relaxed font-light">Convert currencies in seconds. Use pip value, position size, and price alerts on the Tools page.</p>
+                    <a href="tools.html" class="text-sm font-medium text-white inline-flex items-center gap-2 group-hover:text-brand transition-colors">Open Tools <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i></a>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 hover:border-brand/30 transition-all duration-500 group relative overflow-hidden sm:col-span-2 md:col-span-1">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-dark-surface border border-white/5 flex items-center justify-center mb-6 group-hover:-translate-y-2 transition-transform duration-300 shadow-lg">
+                        <i class="fa-solid fa-chart-pie text-brand text-lg sm:text-xl"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-white">Dashboard</h3>
+                    <p class="text-gray-400 text-sm mb-6 sm:mb-8 leading-relaxed font-light">Your portfolio snapshot, watchlist, and key metrics in one dashboard. Sign in to see your balance.</p>
+                    <a href="dashboard.html" class="text-sm font-medium text-white inline-flex items-center gap-2 group-hover:text-brand transition-colors">Open Dashboard <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="platform" class="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 bg-dark-surface border-y border-dark-border relative">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-16 flex flex-col items-center">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-bg border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Platform</span>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">Built for <span class="text-gradient">Traders</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">Everything you need to track forex and manage your trading workflow.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+                    <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">50+</div>
+                    <p class="text-sm text-gray-400">Forex pairs</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+                    <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">4</div>
+                    <p class="text-sm text-gray-400">Trading sessions</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+                    <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">5</div>
+                    <p class="text-sm text-gray-400">Tools</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center col-span-2 md:col-span-1">
+                    <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">24/7</div>
+                    <p class="text-sm text-gray-400">Live rates</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 relative overflow-hidden">
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 w-full h-full max-w-2xl bg-gradient-to-r from-[#f59e0b]/[0.05] to-transparent -z-10 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-10 sm:gap-16 items-center mb-12 sm:mb-20">
+                <div class="space-y-6 sm:space-y-8">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-surface border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Process</span>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight">Trading made <span class="text-gradient">easy</span>, for you</h2>
+                    <p class="text-gray-400 text-base max-w-md leading-relaxed font-light">View pairs and rates, open charts and convert currencies, then track everything from your dashboard.</p>
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <a href="FAQ.html" class="border border-white/20 text-white font-semibold px-6 sm:px-8 py-3.5 rounded-full text-sm hover:bg-white/5 transition-colors flex items-center gap-2 min-h-[44px]">Help Center</a>
+                    </div>
+                </div>
+
+                <div class="relative w-full aspect-video perspective-[1000px]">
+                    <div class="absolute inset-0 bg-dark-card border border-dark-border rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden glass-panel" style="transform: rotateY(-5deg) rotateX(5deg);">
+                        <div class="h-10 border-b border-dark-border bg-dark-bg/50 flex items-center px-4 gap-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="mx-auto bg-dark-border/50 text-gray-500 text-[10px] px-4 sm:px-8 md:px-24 py-1 rounded font-mono truncate max-w-[60%]">ForexPulse Dashboard</div>
+                        </div>
+                        <div class="flex-1 p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-gradient-to-br from-brand to-brand-dark flex items-center justify-center text-black font-bold text-xs">FP</div>
+                                    <div>
+                                        <div class="h-2 w-20 bg-gray-700 rounded mb-1.5"></div>
+                                        <div class="h-1.5 w-12 bg-gray-800 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="h-6 w-24 border border-brand/30 bg-brand/10 rounded-full"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                                <div class="bg-dark-bg border border-dark-border rounded-lg p-2 sm:p-3">
+                                    <div class="text-[9px] text-gray-500 mb-1">Balance</div>
+                                    <div class="text-sm sm:text-lg font-bold text-white">$10,245</div>
+                                </div>
+                                <div class="bg-dark-bg border border-dark-border rounded-lg p-2 sm:p-3">
+                                    <div class="text-[9px] text-gray-500 mb-1">Equity</div>
+                                    <div class="text-sm sm:text-lg font-bold text-green-400">$10,312</div>
+                                </div>
+                                <div class="bg-dark-bg border border-dark-border rounded-lg p-2 sm:p-3 border-b-2 border-b-brand relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-brand/5"></div>
+                                    <div class="text-[9px] text-gray-500 mb-1 relative">Watchlist</div>
+                                    <div class="text-sm sm:text-lg font-bold text-white relative">EUR/USD</div>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-h-[60px] border border-dark-border rounded-lg bg-dark-bg relative overflow-hidden p-2 sm:p-4 flex items-end">
+                                <svg class="w-full h-1/2 opacity-50" preserveAspectRatio="none" viewBox="0 0 100 100">
+                                    <path d="M0,50 Q25,20 50,60 T100,10" fill="none" stroke="#33333C" stroke-width="1"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="dashboard.html" class="absolute -right-2 sm:right-0 top-8 sm:top-12 bg-[#0a0a0c] border border-white/[0.08] p-3 sm:p-4 rounded-xl shadow-xl flex items-center gap-3 animate-float-delayed z-20">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-brand p-0.5 flex items-center justify-center text-brand">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 mb-0.5">Track your portfolio</p>
+                            <p class="text-xs sm:text-sm font-bold text-white">Open Dashboard <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 relative z-10">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative hover:border-white/20 transition-colors">
+                    <div class="absolute top-6 right-6 text-[10px] font-bold text-gray-500 bg-dark-bg border border-dark-border px-2 py-1 rounded">01</div>
+                    <div class="w-12 h-12 rounded-full bg-dark-surface border border-white/5 flex items-center justify-center mb-6 shadow-inner">
+                        <i class="fa-solid fa-list text-gray-300 text-lg"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 text-white">View pairs & rates</h3>
+                    <p class="text-gray-400 text-sm font-light leading-relaxed">Browse all forex pairs with live rates. Jump to charts or the currency converter from one place.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative hover:border-brand/30 transition-colors shadow-[0_0_30px_rgba(245,158,11,0.02)]">
+                    <div class="absolute top-6 right-6 text-[10px] font-bold text-brand bg-brand/10 border border-brand/20 px-2 py-1 rounded">02</div>
+                    <div class="w-12 h-12 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center mb-6 relative">
+                        <i class="fa-solid fa-chart-line text-brand text-lg relative z-10"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 text-white">Charts & convert</h3>
+                    <p class="text-gray-400 text-sm font-light leading-relaxed">Open pair detail for full charts. Use Tools for pip value, position size, and currency conversion.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative hover:border-white/20 transition-colors sm:col-span-2 md:col-span-1">
+                    <div class="absolute top-6 right-6 text-[10px] font-bold text-gray-500 bg-dark-bg border border-dark-border px-2 py-1 rounded">03</div>
+                    <div class="w-12 h-12 rounded-full bg-dark-surface border border-white/5 flex items-center justify-center mb-6 shadow-inner">
+                        <i class="fa-solid fa-chart-pie text-gray-300 text-lg"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 text-white">Dashboard</h3>
+                    <p class="text-gray-400 text-sm font-light leading-relaxed">Your portfolio snapshot, watchlist, and balance. Sign in to see your data and manage your view.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="get-started" class="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 bg-dark-surface border-t border-dark-border">
+        <div class="max-w-2xl mx-auto text-center">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-bg border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Get started</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mt-4 mb-3">Free to use</h2>
+            <p class="text-gray-400 text-sm md:text-base mb-8">No paid plans. View pairs, use tools, and open your dashboard. Sign in to save your portfolio and settings.</p>
+        </div>
+    </section>
+
+    <section id="benefits" class="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 bg-dark-bg">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-20 flex flex-col items-center">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-surface border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Benefits</span>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">Why traders use <span class="text-gradient">Forex</span>Pulse</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm md:text-base font-light">One place for rates, charts, conversion, and your dashboard.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-border to-dark-surface border border-white/5 flex items-center justify-center mb-6 text-brand shadow-inner">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white">Real-time rates</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">Live forex rates for 50+ pairs. See movement at a glance and open full charts.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-border to-dark-surface border border-white/5 flex items-center justify-center mb-6 text-brand shadow-inner">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white">Pip & position tools</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">Pip value, position size calculator, and currency converter. All in Tools.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300 relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center mb-6 text-brand relative z-10 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white relative z-10">Dashboard</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light relative z-10">Portfolio snapshot, watchlist, and balance. Sign in to personalize.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-border to-dark-surface border border-white/5 flex items-center justify-center mb-6 text-brand shadow-inner">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white">Trading sessions</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">Sydney, Tokyo, London, New York. See session times and plan your trading.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-border to-dark-surface border border-white/5 flex items-center justify-center mb-6 text-brand shadow-inner">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white">Charts</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">Pair detail pages with full chart view. Link through from Home or All Pairs.</p>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:-translate-y-1 hover:border-white/10 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-border to-dark-surface border border-white/5 flex items-center justify-center mb-6 text-brand shadow-inner">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg mb-2 text-white">Help center</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">FAQ and support. Find answers to common questions about the platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 relative overflow-hidden bg-dark-surface">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1000px] h-[400px] sm:h-[600px] bg-[#f59e0b]/[0.06] rounded-[100%] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-20 flex flex-col items-center">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-bg border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Community</span>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">Traders use <span class="text-gradient">ForexPulse</span></h2>
+            </div>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                <div class="bg-[#111114] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col h-full relative">
+                    <i class="fa-solid fa-quote-right absolute top-6 right-6 sm:top-8 sm:right-8 text-3xl sm:text-4xl text-white/5"></i>
+                    <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-brand/30 p-0.5 bg-dark-card flex items-center justify-center text-brand text-sm"><i class="fa-solid fa-user"></i></div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Alex M.</p>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wide">Trader</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed font-light italic flex-grow">"Clean layout and fast. I use it for quick rate checks and the converter before placing trades."</p>
+                </div>
+                <div class="bg-[#111114] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col h-full relative md:translate-y-4">
+                    <i class="fa-solid fa-quote-right absolute top-6 right-6 sm:top-8 sm:right-8 text-3xl sm:text-4xl text-white/5"></i>
+                    <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-brand/30 p-0.5 bg-dark-card flex items-center justify-center text-brand text-sm"><i class="fa-solid fa-user"></i></div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Sam K.</p>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wide">Trader</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed font-light italic flex-grow">"Dashboard and tools in one place. No clutter. Exactly what I needed for forex and prop."</p>
+                </div>
+                <div class="bg-[#111114] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col h-full relative sm:col-span-2 md:col-span-1">
+                    <i class="fa-solid fa-quote-right absolute top-6 right-6 sm:top-8 sm:right-8 text-3xl sm:text-4xl text-white/5"></i>
+                    <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-brand/30 p-0.5 bg-dark-card flex items-center justify-center text-brand text-sm"><i class="fa-solid fa-user"></i></div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Jordan L.</p>
+                            <p class="text-[10px] text-brand uppercase tracking-wide bg-brand/10 inline-block px-2 py-0.5 rounded mt-1">Dashboard user</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed font-light italic flex-grow">"Session times and pair list are handy. Help center answered my questions quickly."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 bg-dark-bg border-t border-dark-border">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr_2fr] gap-10 sm:gap-16">
+            <div class="space-y-6 sticky top-32 self-start">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-surface border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Knowledge</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight">Frequently asked <span class="text-gradient">questions</span></h2>
+                <p class="text-gray-400 text-sm leading-relaxed font-light mb-8">Common questions about ForexPulse. More answers in the Help Center.</p>
+                <a href="FAQ.html" class="inline-flex items-center gap-2 text-sm font-bold text-white border-b border-brand pb-1 hover:text-brand transition-colors">Help Center <i class="fa-solid fa-arrow-right text-xs"></i></a>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-white/10">
+                    <button type="button" class="faq-btn w-full px-6 sm:px-8 py-5 sm:py-6 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-bold text-base sm:text-lg text-white group-hover:text-brand transition-colors pr-4">What is ForexPulse?</span>
+                        <div class="w-8 h-8 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center icon-container transition-transform duration-300 flex-shrink-0">
+                            <i class="fa-solid fa-plus text-gray-400 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-grid">
+                        <div class="faq-inner">
+                            <p class="px-6 sm:px-8 pb-6 text-sm text-gray-400 leading-relaxed font-light">ForexPulse is a trading platform for forex and prop trading. You can view real-time rates, charts, convert currencies, and manage your dashboard from one place.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-white/10">
+                    <button type="button" class="faq-btn w-full px-6 sm:px-8 py-5 sm:py-6 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-bold text-base sm:text-lg text-white group-hover:text-brand transition-colors pr-4">How do I view pairs and rates?</span>
+                        <div class="w-8 h-8 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center icon-container transition-transform duration-300 flex-shrink-0">
+                            <i class="fa-solid fa-plus text-gray-400 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-grid">
+                        <div class="faq-inner">
+                            <p class="px-6 sm:px-8 pb-6 text-sm text-gray-400 leading-relaxed font-light">Go to Home or All Pairs. You’ll see live rates for major and minor pairs. Click a pair to open its detail page with the full chart and more data.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-white/10">
+                    <button type="button" class="faq-btn w-full px-6 sm:px-8 py-5 sm:py-6 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-bold text-base sm:text-lg text-white group-hover:text-brand transition-colors pr-4">Where is the currency converter?</span>
+                        <div class="w-8 h-8 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center icon-container transition-transform duration-300 flex-shrink-0">
+                            <i class="fa-solid fa-plus text-gray-400 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-grid">
+                        <div class="faq-inner">
+                            <p class="px-6 sm:px-8 pb-6 text-sm text-gray-400 leading-relaxed font-light">The converter is on the Tools page, along with pip value, position size, and price alerts. You can also use the converter on Home.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-white/10">
+                    <button type="button" class="faq-btn w-full px-6 sm:px-8 py-5 sm:py-6 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-bold text-base sm:text-lg text-white group-hover:text-brand transition-colors pr-4">Do I need an account?</span>
+                        <div class="w-8 h-8 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center icon-container transition-transform duration-300 flex-shrink-0">
+                            <i class="fa-solid fa-plus text-gray-400 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-grid">
+                        <div class="faq-inner">
+                            <p class="px-6 sm:px-8 pb-6 text-sm text-gray-400 leading-relaxed font-light">You can view pairs, charts, and use the converter without signing in. Sign in to see your portfolio snapshot, balance, and save your preferences on the dashboard.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 sm:py-32 md:py-40 px-4 sm:px-6 md:px-12 relative overflow-hidden flex justify-center items-center text-center min-h-[60vh] sm:min-h-[70vh] border-t border-white/5">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#f59e0b]/[0.08] rounded-full -z-20"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border-[0.5px] border-brand/20 rounded-full -z-10 animate-pulse-slow"></div>
+        <div class="relative z-10 space-y-6 sm:space-y-8 max-w-3xl mx-auto flex flex-col items-center glass-panel p-8 sm:p-12 rounded-[2rem] sm:rounded-[3rem] shadow-2xl">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white">Start with <span class="text-gradient">ForexPulse</span></h2>
+            <p class="text-gray-300 text-base sm:text-lg md:text-xl font-light max-w-lg">View pairs, use tools, and open your dashboard. Free to use.</p>
+            <div class="pt-2 flex flex-wrap justify-center gap-4">
+                <a href="auth.html" class="landing-guest-only border border-white/20 text-white font-semibold px-8 sm:px-10 py-4 rounded-full text-base hover:bg-white/5 transition-colors min-h-[48px] flex items-center">Sign in</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark-bg pt-16 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 md:px-12 border-t border-dark-border">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
+                <div class="col-span-2 sm:col-span-2 md:col-span-1 space-y-4 sm:space-y-6">
+                    <a href="index.html" class="fp-logo logo-lg flex items-center text-xl sm:text-2xl text-white hover:opacity-95 transition-opacity duration-200" aria-label="ForexPulse home">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M12.5 1L10.5 10h4.5L8.5 23l2-10h-5L12.5 1z" fill="#f59e0b"/>
+                        </svg>
+                        <span class="logo-wordmark"><span class="text-white">Forex</span><span class="logo-accent transition-colors duration-200">Pulse</span></span>
+                    </a>
+                    <p class="text-sm text-gray-500 font-light leading-relaxed">Trading platform for forex and prop. Real-time rates, charts, tools, and dashboard.</p>
+                </div>
+                <div id="footer-product-col">
+                    <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Product</h4>
+                    <ul class="space-y-3 sm:space-y-4 text-sm text-gray-400 font-light">
+                        <li><a href="home.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="pairs.html" class="hover:text-white transition-colors">All Pairs</a></li>
+                        <li><a href="tools.html" class="hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="dashboard.html" class="hover:text-white transition-colors">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Support</h4>
+                    <ul class="space-y-3 sm:space-y-4 text-sm text-gray-400 font-light">
+                        <li><a href="FAQ.html" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="auth.html" class="landing-guest-only hover:text-white transition-colors">Sign in</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-dark-border pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-600 font-light">© 2025 ForexPulse. All rights reserved.</p>
+                <p class="text-[10px] text-gray-600 font-light max-w-xl text-center md:text-right">Trading carries risk. Past performance is not indicative of future results.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var header = document.getElementById('header');
+            if (header) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 20) {
+                        header.classList.add('bg-[#050506]', 'pb-4');
+                        header.classList.remove('pt-6');
+                        header.classList.add('pt-4');
+                    } else {
+                        header.classList.remove('bg-[#050506]', 'pb-4');
+                        header.classList.add('pt-6');
+                        header.classList.remove('pt-4');
+                    }
+                });
+            }
+
+            var faqBtns = document.querySelectorAll('.faq-btn');
+            faqBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var grid = this.nextElementSibling;
+                    var iconContainer = this.querySelector('.icon-container');
+                    var icon = this.querySelector('i');
+                    var isOpen = grid && grid.classList.contains('is-open');
+                    document.querySelectorAll('.faq-grid').forEach(function(g) {
+                        g.classList.remove('is-open');
+                        var prev = g.previousElementSibling;
+                        if (prev) {
+                            var i = prev.querySelector('i');
+                            var ic = prev.querySelector('.icon-container');
+                            if (i) i.className = 'fa-solid fa-plus text-gray-400 text-sm';
+                            if (ic) ic.classList.remove('rotate-90', 'border-brand/50', 'bg-brand/10');
+                        }
+                    });
+                    if (grid && !isOpen) {
+                        grid.classList.add('is-open');
+                        if (icon) icon.className = 'fa-solid fa-minus text-brand text-sm';
+                        if (iconContainer) iconContainer.classList.add('rotate-90', 'border-brand/50', 'bg-brand/10');
+                    }
+                });
+            });
+
+            var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            var mobileMenu = document.getElementById('mobile-menu');
+            var mobileMenuIcon = document.getElementById('mobile-menu-icon');
+            if (mobileMenuBtn && mobileMenu && mobileMenuIcon) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    var isOpen = mobileMenu.classList.toggle('is-open');
+                    mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+                    mobileMenuIcon.className = isOpen ? 'fa-solid fa-times text-xl' : 'fa-solid fa-bars text-xl';
+                });
+            }
+
+            // Landing only: section links scroll to section and close mobile menu
+            document.querySelectorAll('.landing-section-link').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    if (href && href.indexOf('#') === 0) {
+                        var id = href.slice(1);
+                        var target = document.getElementById(id);
+                        if (target) {
+                            e.preventDefault();
+                            if (mobileMenu && mobileMenu.classList.contains('is-open')) {
+                                mobileMenu.classList.remove('is-open');
+                                if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                                if (mobileMenu) mobileMenu.setAttribute('aria-hidden', 'true');
+                                if (mobileMenuIcon) mobileMenuIcon.className = 'fa-solid fa-bars text-xl';
+                            }
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            if (history.replaceState) history.replaceState(null, '', href);
+                        }
+                    }
+                });
+            });
+
+            if (window.getCurrentUser) {
+                var user = window.getCurrentUser();
+                if (!user) {
+                    document.querySelectorAll('a[href="home.html"], a[href="dashboard.html"]').forEach(function(a) {
+                        a.href = 'auth.html';
+                    });
+                }
+                var authBlock = document.getElementById('header-auth-block');
+                var signInLink = document.getElementById('nav-signin');
+                var signInMob = document.getElementById('nav-signin-mob');
+                var mobileNavSignin = document.getElementById('mobile-nav-signin');
+                var avatar = document.getElementById('header-user-avatar');
+                var nameEl = document.getElementById('header-user-name');
+                var emailEl = document.getElementById('header-user-email');
+                var mobileAuthBlock = document.getElementById('mobile-auth-block');
+                var mobileAvatar = document.getElementById('mobile-user-avatar');
+                var mobileUserName = document.getElementById('mobile-user-name');
+                var mobileUserEmail = document.getElementById('mobile-user-email');
+                var landingMenu = document.getElementById('landing-account-menu');
+                var mobileMenu = document.getElementById('mobile-account-menu');
+                var panel = document.getElementById('landing-account-panel');
+                var trigger = document.getElementById('landing-account-trigger');
+
+                function buildMenuItems(role) {
+                    var signOut = '<a href="#" class="landing-logout-btn sign-out" role="menuitem"><i class="fa-solid fa-right-from-bracket w-4"></i>Sign out</a>';
+                    if (role === 'admin') {
+                        return '<a href="auth.html" role="menuitem"><i class="fa-solid fa-gauge-high text-amber-400 w-4"></i>Admin Dashboard</a>' +
+                            '<div class="dropdown-divider"></div>' + signOut;
+                    }
+                    return '<a href="dashboard.html" role="menuitem"><i class="fa-solid fa-chart-pie text-amber-400 w-4"></i>Dashboard</a>' +
+                        '<a href="settings.html" role="menuitem"><i class="fa-solid fa-gear text-amber-400 w-4"></i>Settings</a>' +
+                        '<div class="dropdown-divider"></div>' + signOut;
+                }
+
+                function doLogout(e) {
+                    e.preventDefault();
+                    if (window.clearSession) window.clearSession();
+                    window.location.href = 'index.html';
+                }
+
+                if (user) {
+                    if (authBlock) { authBlock.classList.remove('hidden'); authBlock.style.display = 'block'; }
+                    if (signInLink) signInLink.style.display = 'none';
+                    if (signInMob) signInMob.style.display = 'none';
+                    if (mobileNavSignin) mobileNavSignin.style.display = 'none';
+                    if (mobileAuthBlock) { mobileAuthBlock.classList.remove('hidden'); mobileAuthBlock.style.display = 'block'; }
+                    document.querySelectorAll('.landing-guest-only').forEach(function(el) { el.style.display = 'none'; });
+                    var footerProduct = document.getElementById('footer-product-col');
+                    if (footerProduct) footerProduct.style.display = (user.role === 'admin') ? 'none' : '';
+
+                    var isAdmin = user.role === 'admin';
+                    var displayName = isAdmin ? 'Admin' : (user.name || 'User');
+                    var displayEmail = isAdmin ? 'admin@forex.com' : (user.email || '');
+                    var initials = isAdmin ? 'A' : (displayName ? (displayName.split(/\s+/).length >= 2 ? (displayName.split(/\s+/)[0][0] + displayName.split(/\s+/).pop()[0]).toUpperCase() : displayName.slice(0, 2).toUpperCase()) : (user.email || '?').slice(0, 2).toUpperCase());
+
+                    if (avatar) avatar.textContent = initials;
+                    if (nameEl) nameEl.textContent = displayName;
+                    if (emailEl) emailEl.textContent = displayEmail;
+                    if (mobileAvatar) mobileAvatar.textContent = initials;
+                    if (mobileUserName) mobileUserName.textContent = displayName;
+                    if (mobileUserEmail) mobileUserEmail.textContent = displayEmail;
+
+                    var menuHtml = buildMenuItems(user.role || 'user');
+                    if (landingMenu) landingMenu.innerHTML = menuHtml;
+                    if (mobileMenu) mobileMenu.innerHTML = menuHtml;
+
+                    document.querySelectorAll('.landing-logout-btn').forEach(function(btn) {
+                        btn.addEventListener('click', doLogout);
+                    });
+
+                    if (trigger && panel) {
+                        trigger.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var open = panel.classList.toggle('hidden');
+                            trigger.setAttribute('aria-expanded', !open);
+                        });
+                        document.addEventListener('click', function(e) {
+                            if (panel.contains(e.target) || trigger.contains(e.target)) return;
+                            panel.classList.add('hidden');
+                            trigger.setAttribute('aria-expanded', 'false');
+                        });
+                    }
+                } else {
+                    if (authBlock) authBlock.classList.add('hidden');
+                    if (signInLink) signInLink.style.display = '';
+                    if (signInMob) signInMob.style.display = '';
+                    if (mobileNavSignin) mobileNavSignin.style.display = '';
+                    if (mobileAuthBlock) mobileAuthBlock.classList.add('hidden');
+                    document.querySelectorAll('.landing-guest-only').forEach(function(el) { el.style.display = ''; });
+                    var footerProduct = document.getElementById('footer-product-col');
+                    if (footerProduct) footerProduct.style.display = '';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
