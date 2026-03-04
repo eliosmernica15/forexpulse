@@ -470,13 +470,13 @@
       var closeBtn = document.getElementById('pair-detail-chart-fullscreen-close');
       if (wrapper && expandBtn) {
         expandBtn.addEventListener('click', function () {
-          if (wrapper.requestFullscreen) wrapper.requestFullscreen();
-          else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+          if (window.requestChartFullscreen) window.requestChartFullscreen(wrapper);
         });
       }
       function onFullscreenChange() {
         if (!wrapper) return;
-        if (document.fullscreenElement === wrapper || document.webkitFullscreenElement === wrapper) {
+        var el = window.getChartFullscreenElement ? window.getChartFullscreenElement() : (document.fullscreenElement || document.webkitFullscreenElement);
+        if (el === wrapper) {
           wrapper.classList.add('is-fullscreen');
           setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100);
         } else {
@@ -485,10 +485,11 @@
       }
       document.addEventListener('fullscreenchange', onFullscreenChange);
       document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+      document.addEventListener('mozfullscreenchange', onFullscreenChange);
+      document.addEventListener('MSFullscreenChange', onFullscreenChange);
       if (closeBtn) {
         closeBtn.addEventListener('click', function () {
-          if (document.exitFullscreen) document.exitFullscreen();
-          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          if (window.exitChartFullscreen) window.exitChartFullscreen(wrapper);
         });
       }
     })();

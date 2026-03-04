@@ -282,3 +282,61 @@ if (typeof window !== 'undefined') {
     run();
   }
 })();
+
+/**
+ * Chart fullscreen — works on desktop and mobile (with fallback for iOS/Safari).
+ * Use requestChartFullscreen(wrapper) and exitChartFullscreen(wrapper).
+ */
+(function () {
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement || null;
+  }
+
+  function requestFullscreen(el) {
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    if (el.mozRequestFullScreen) return el.mozRequestFullScreen();
+    if (el.msRequestFullscreen) return el.msRequestFullscreen();
+    return null;
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
+    if (document.msExitFullscreen) return document.msExitFullscreen();
+    return null;
+  }
+
+  function isFullscreenSupported() {
+    return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
+  }
+
+  window.requestChartFullscreen = function (wrapper) {
+    if (!wrapper) return;
+    var supported = isFullscreenSupported();
+    var req = requestFullscreen(wrapper);
+    if (req && typeof req.then === 'function') {
+      req.then(function () { /* fullscreenchange will add .is-fullscreen */ }).catch(function () {
+        wrapper.classList.add('is-fullscreen');
+        wrapper.setAttribute('data-fake-fullscreen', '1');
+        setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100);
+      });
+    } else if (!supported || !req) {
+      wrapper.classList.add('is-fullscreen');
+      wrapper.setAttribute('data-fake-fullscreen', '1');
+      setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100);
+    }
+  };
+
+  window.exitChartFullscreen = function (wrapper) {
+    exitFullscreen();
+    if (wrapper) {
+      wrapper.classList.remove('is-fullscreen');
+      wrapper.removeAttribute('data-fake-fullscreen');
+      setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50);
+    }
+  };
+
+  window.getChartFullscreenElement = getFullscreenElement;
+})();

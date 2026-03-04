@@ -657,15 +657,18 @@
       var wrapper = document.getElementById('pair-overview-fullscreen-wrapper');
       var expandBtn = document.getElementById('pair-overview-chart-expand-btn');
       var closeBtn = document.getElementById('pair-overview-fullscreen-close');
-      if (wrapper && expandBtn) expandBtn.addEventListener('click', function () { if (wrapper.requestFullscreen) wrapper.requestFullscreen(); else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen(); });
+      if (wrapper && expandBtn) expandBtn.addEventListener('click', function () { if (window.requestChartFullscreen) window.requestChartFullscreen(wrapper); });
       function onFullscreenChange() {
         if (!wrapper) return;
-        if (document.fullscreenElement === wrapper || document.webkitFullscreenElement === wrapper) { wrapper.classList.add('is-fullscreen'); setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100); }
+        var el = window.getChartFullscreenElement ? window.getChartFullscreenElement() : (document.fullscreenElement || document.webkitFullscreenElement);
+        if (el === wrapper) { wrapper.classList.add('is-fullscreen'); setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100); }
         else wrapper.classList.remove('is-fullscreen');
       }
       document.addEventListener('fullscreenchange', onFullscreenChange);
       document.addEventListener('webkitfullscreenchange', onFullscreenChange);
-      if (closeBtn) closeBtn.addEventListener('click', function () { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); });
+      document.addEventListener('mozfullscreenchange', onFullscreenChange);
+      document.addEventListener('MSFullscreenChange', onFullscreenChange);
+      if (closeBtn) closeBtn.addEventListener('click', function () { if (window.exitChartFullscreen) window.exitChartFullscreen(wrapper); });
     })();
   </script>
   <script>

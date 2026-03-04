@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="ForexPulse — Professional forex charts, live pairs, and trading tools. View rates, sessions, and open your dashboard.">
+    <link rel="canonical" href="https://forexpulse-trading.vercel.app/">
     <title>ForexPulse — Trading Platform</title>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"WebApplication","name":"ForexPulse","description":"Professional forex charts, live pairs, and trading tools.","url":"./index.html","applicationCategory":"FinanceApplication"}
+    {"@context":"https://schema.org","@type":"WebApplication","name":"ForexPulse","description":"Professional forex charts, live pairs, and trading tools.","url":"https://forexpulse-trading.vercel.app/","applicationCategory":"FinanceApplication"}
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -212,6 +213,15 @@
             color: #fbbf24;
             box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15);
         }
+        /* Footer — safe area for notched devices, responsive on small screens */
+        .landing-footer {
+            padding-bottom: max(2rem, env(safe-area-inset-bottom));
+        }
+        @media (min-width: 640px) {
+            .landing-footer {
+                padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body class="overflow-x-hidden relative antialiased">
@@ -381,20 +391,20 @@
                 <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">Built for <span class="text-gradient">Traders</span></h2>
                 <p class="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">Everything you need to track forex and manage your trading workflow.</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center">
                     <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">50+</div>
                     <p class="text-sm text-gray-400">Forex pairs</p>
                 </div>
-                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center">
                     <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">4</div>
                     <p class="text-sm text-gray-400">Trading sessions</p>
                 </div>
-                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center">
                     <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">5</div>
                     <p class="text-sm text-gray-400">Tools</p>
                 </div>
-                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-6 text-center col-span-2 md:col-span-1">
+                <div class="bg-dark-card border border-dark-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center col-span-2 md:col-span-1">
                     <div class="text-3xl sm:text-4xl font-bold text-brand mb-1">24/7</div>
                     <p class="text-sm text-gray-400">Live rates</p>
                 </div>
@@ -458,7 +468,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="dashboard.html" class="absolute -right-2 sm:right-0 top-8 sm:top-12 bg-[#0a0a0c] border border-white/[0.08] p-3 sm:p-4 rounded-xl shadow-xl flex items-center gap-3 animate-float-delayed z-20">
+                    <a href="dashboard.html" class="absolute right-0 top-8 sm:top-12 bg-[#0a0a0c] border border-white/[0.08] p-3 sm:p-4 rounded-xl shadow-xl hidden sm:flex items-center gap-3 animate-float-delayed z-20">
                         <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-brand p-0.5 flex items-center justify-center text-brand">
                             <i class="fa-solid fa-chart-line text-sm"></i>
                         </div>
@@ -608,7 +618,7 @@
 
     <section id="faq" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 bg-dark-bg border-t border-dark-border">
         <div class="max-w-6xl mx-auto grid lg:grid-cols-[1fr_2fr] gap-10 sm:gap-16">
-            <div class="space-y-6 sticky top-32 self-start">
+            <div class="space-y-6 lg:sticky lg:top-24 xl:top-32 self-start">
                 <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 bg-dark-surface border border-dark-border px-4 py-1.5 rounded-full shadow-sm">Knowledge</span>
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight">Frequently asked <span class="text-gradient">questions</span></h2>
                 <p class="text-gray-400 text-sm leading-relaxed font-light mb-8">Common questions about ForexPulse. More answers in the Help Center.</p>
@@ -683,10 +693,10 @@
         </div>
     </section>
 
-    <footer class="bg-dark-bg pt-16 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 md:px-12 border-t border-dark-border">
+    <footer class="landing-footer bg-dark-bg pt-16 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 md:px-12 border-t border-dark-border" role="contentinfo">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
-                <div class="col-span-2 sm:col-span-2 md:col-span-1 space-y-4 sm:space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
+                <div class="col-span-1 sm:col-span-2 md:col-span-1 space-y-4 sm:space-y-6">
                     <a href="index.html" class="fp-logo logo-lg flex items-center text-xl sm:text-2xl text-white hover:opacity-95 transition-opacity duration-200" aria-label="ForexPulse home">
                         <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path d="M12.5 1L10.5 10h4.5L8.5 23l2-10h-5L12.5 1z" fill="#f59e0b"/>
@@ -712,9 +722,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-dark-border pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-xs text-gray-600 font-light">© 2025 ForexPulse. All rights reserved.</p>
-                <p class="text-[10px] text-gray-600 font-light max-w-xl text-center md:text-right">Trading carries risk. Past performance is not indicative of future results.</p>
+            <div class="border-t border-dark-border pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <p class="text-xs text-gray-600 font-light order-2 md:order-1">© 2025 ForexPulse. All rights reserved.</p>
+                <p class="text-[10px] text-gray-600 font-light max-w-xl order-1 md:order-2">Trading carries risk. Past performance is not indicative of future results.</p>
             </div>
         </div>
     </footer>

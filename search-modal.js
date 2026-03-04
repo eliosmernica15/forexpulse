@@ -52,8 +52,13 @@
     }
 
     function search() {
+      if (!window.ForexPulsePairs || typeof window.ForexPulsePairs.search !== 'function') {
+        listEl.innerHTML = '<div class="py-6 px-4 text-center text-sm" style="color: var(--fp-muted);">Search not available. <a href="pairs.html" style="color: var(--fp-accent); font-weight: 500;">Browse all pairs</a></div>';
+        currentResults = [];
+        return;
+      }
       var q = (input && input.value) || '';
-      var results = window.ForexPulsePairs && window.ForexPulsePairs.search ? window.ForexPulsePairs.search(q) : [];
+      var results = window.ForexPulsePairs.search(q);
       renderList(results);
     }
 
@@ -99,7 +104,7 @@
       search();
       setTimeout(function () {
         if (input) input.focus();
-      }, 50);
+      }, 150);
       document.addEventListener('keydown', onKeyDown);
     }
 
