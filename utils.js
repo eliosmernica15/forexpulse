@@ -1,6 +1,4 @@
-/**
- * ForexPulse — shared utilities (formatting, pagination)
- */
+
 
 function formatCurrency(value, digits, currency, showSymbol) {
   if (value === null || value === undefined || isNaN(value)) {
@@ -71,11 +69,7 @@ function buildPageNumbers(currentPage, totalPages) {
   return pages;
 }
 
-/**
- * Returns CSS class names for trend (up/down/neutral) — matches Next.js trending styling.
- * @param {number|null|undefined} change - Percentage change value
- * @returns {{ textClass: string, bgClass: string, badgeClass: string }}
- */
+
 function trendingClasses(change) {
   if (change === null || change === undefined || isNaN(change)) {
     return { textClass: '', bgClass: '', badgeClass: '' };
@@ -89,7 +83,7 @@ function trendingClasses(change) {
   return { textClass: '', bgClass: '', badgeClass: '' };
 }
 
-// --- Per-user storage and UI helpers (shared with tools page) ---
+
 var ALERTS_KEY_PREFIX = 'forex_price_alerts_';
 var DEMO_BALANCE_PREFIX = 'forex_demo_balance_';
 var DEFAULT_DEMO_BALANCE = 10000;
@@ -156,7 +150,7 @@ function showError(id, message) {
   el.classList.toggle('hidden', !message);
 }
 
-// Export for use in other scripts (global or module)
+
 if (typeof window !== 'undefined') {
   window.ForexPulseUtils = {
     formatCurrency: formatCurrency,
@@ -178,11 +172,7 @@ if (typeof window !== 'undefined') {
   };
 }
 
-/**
- * Mobile sidebar: inject hamburger button and overlay, toggle sidebar on small screens.
- * Run after DOM ready; only when .fp-app-layout and .fp-sidebar exist.
- * Sidebar is never auto-opened on load or when navigating.
- */
+
 (function initMobileSidebar() {
   function run() {
     var layout = document.querySelector('.fp-app-layout');
@@ -283,10 +273,7 @@ if (typeof window !== 'undefined') {
   }
 })();
 
-/**
- * Chart fullscreen — works on desktop and mobile (with fallback for iOS/Safari).
- * Use requestChartFullscreen(wrapper) and exitChartFullscreen(wrapper).
- */
+
 (function () {
   function getFullscreenElement() {
     return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement || null;
@@ -317,7 +304,7 @@ if (typeof window !== 'undefined') {
     var supported = isFullscreenSupported();
     var req = requestFullscreen(wrapper);
     if (req && typeof req.then === 'function') {
-      req.then(function () { /* fullscreenchange will add .is-fullscreen */ }).catch(function () {
+      req.then(function () {  }).catch(function () {
         wrapper.classList.add('is-fullscreen');
         wrapper.setAttribute('data-fake-fullscreen', '1');
         setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 100);

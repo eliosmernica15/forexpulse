@@ -1,6 +1,4 @@
-/**
- * ForexPulse — search modal: search pairs, keyboard nav, link to pair detail
- */
+
 (function () {
   var DEBOUNCE_MS = 300;
   var debounceTimer = null;

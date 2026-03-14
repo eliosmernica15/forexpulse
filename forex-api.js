@@ -1,15 +1,8 @@
-/**
- * ForexPulse — forex rates via Frankfurter API
- * https://api.frankfurter.app
- */
+
 (function () {
   var BASE = 'https://api.frankfurter.app';
 
-  /**
-   * Fetch latest rates: from one currency to many.
-   * e.g. getLatest({ from: 'USD', to: ['EUR', 'GBP', 'JPY', 'AUD'] })
-   * returns { base, date, rates: { EUR: 0.92, GBP: 0.79, ... } }
-   */
+  
   function getLatest(options, callback) {
     var from = (options && options.from) || 'USD';
     var to = options && options.to;
@@ -31,10 +24,7 @@
       });
   }
 
-  /**
-   * Get rates for our standard pair list. Returns a map: pair -> { rate, date }.
-   * Uses USD as base and requests all needed quote currencies.
-   */
+  
   function getRatesForPairs(pairsList, callback) {
     if (!pairsList || pairsList.length === 0) {
     }
@@ -82,9 +72,7 @@
     });
   }
 
-  /**
-   * Get single pair rate. pair e.g. 'EUR/USD'
-   */
+  
   function getPairRate(pair, callback) {
     var parts = (pair || '').split('/');
     if (parts.length !== 2) {

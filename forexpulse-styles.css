@@ -1,13 +1,10 @@
-/**
- * ForexPulse — dark theme and layout (inspired by CoinPulse reference)
- * Use with Tailwind 3.4; body should have class "dark" or bg-[var(--fp-dark-700)]
- */
+
 
 .hidden {
   display: none !important;
 }
 
-/* Focus visible — keyboard nav (replication: Next.js outline-ring) */
+
 .forexpulse-header a:focus-visible,
 .forexpulse-header button:focus-visible,
 .fp-sidebar a:focus-visible,
@@ -37,7 +34,7 @@ button:focus-visible,
   outline-offset: 2px;
 }
 
-/* Skip link — for keyboard users (optional replication) */
+
 .skip-link {
   position: absolute;
   top: -3rem;
@@ -90,20 +87,20 @@ button:focus-visible,
   --fp-gradient-danger: linear-gradient(90deg, #ef4444, #f87171);
 }
 
-/* Utility classes — visual only; use to replace inline color/background/border where safe */
+
 .fp-text-muted { color: var(--fp-muted); }
 .fp-text-foreground { color: var(--fp-foreground); }
 .fp-bg-surface { background-color: var(--fp-surface-solid); }
 .fp-border-default { border-color: var(--fp-border); }
 
-/* ====== Global base (aligned with landing) ====== */
+
 body {
   background-color: #050506;
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar — same as landing across all pages */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -119,7 +116,7 @@ body {
   display: none;
 }
 
-/* Shared utilities from landing (available on all pages) */
+
 .bg-dots {
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
@@ -139,9 +136,9 @@ body {
   background-clip: text;
 }
 
-/* E8-style global components */
 
-/* Base card — glassmorphism, rounded, shadow, subtle diagonal lines + gradient (reference) */
+
+
 .fp-card {
   background-color: var(--fp-surface);
   background-image:
@@ -171,7 +168,7 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 24px rgba(245, 158, 11, 0.06);
 }
 
-/* Chart card — fill available space so chart grows into area below */
+
 .fp-card.fp-card-chart {
   display: flex;
   flex-direction: column;
@@ -226,7 +223,7 @@ body {
   overflow: hidden;
 }
 
-/* Tools page — card and Price alerts */
+
 .fp-card-tool {
   max-width: 28rem;
 }
@@ -306,7 +303,7 @@ body {
   color: var(--fp-muted);
 }
 
-/* Pair-detail and index: chart section fills space */
+
 #pair-detail-chart-fullscreen-wrapper {
   min-height: 65vh;
   display: flex;
@@ -320,7 +317,7 @@ body {
   flex-direction: column;
 }
 
-/* Chart preview: chart area full border width and fills height within the card */
+
 #pair-detail-chart-fullscreen-wrapper.fp-card .fp-chart-fullscreen-chart {
   flex: 1 1 0;
   min-height: 55vh;
@@ -361,7 +358,7 @@ body {
   min-height: 100%;
 }
 
-/* Chart attribution: inside chart card, at bottom of chart area (not under the card) */
+
 .fp-chart-attribution {
   flex: 0 0 auto;
   margin: 0;
@@ -387,13 +384,13 @@ body {
   border-bottom-color: var(--fp-accent);
 }
 
-/* Keep attribution visible inside chart card (chart area has negative margin) */
+
 #pair-detail-chart-fullscreen-wrapper.fp-card .fp-chart-fullscreen-chart .fp-chart-attribution {
   margin-left: 0;
   margin-right: 0;
 }
 
-/* Recent Trades empty state: clear placeholder (not a broken table) */
+
 .fp-trades-empty {
   padding: 2rem 1rem;
   text-align: center;
@@ -431,7 +428,7 @@ body {
   height: 100%;
 }
 
-/* Chart fullscreen wrapper — Expand button opens chart in fullscreen */
+
 .fp-chart-fullscreen-wrapper {
   display: flex;
   flex-direction: column;
@@ -476,7 +473,7 @@ body {
   overflow: hidden;
 }
 
-/* Chart area gets explicit viewport height so TradingView widget has definite size */
+
 .fp-chart-fullscreen-wrapper:fullscreen .fp-chart-fullscreen-chart,
 .fp-chart-fullscreen-wrapper:-webkit-full-screen .fp-chart-fullscreen-chart,
 .fp-chart-fullscreen-wrapper:-moz-full-screen .fp-chart-fullscreen-chart,
@@ -515,7 +512,7 @@ body {
   overflow: hidden;
 }
 
-/* Force TradingView inner div and iframe to fill container so chart content is large */
+
 .fp-chart-fullscreen-wrapper:fullscreen .tradingview-widget-container__widget,
 .fp-chart-fullscreen-wrapper:-webkit-full-screen .tradingview-widget-container__widget {
   height: 100% !important;
@@ -528,7 +525,7 @@ body {
   min-height: 80vh !important;
 }
 
-/* Fallback "fake" fullscreen for iOS/Safari and when native API is unavailable */
+
 .fp-chart-fullscreen-wrapper.is-fullscreen[data-fake-fullscreen="1"] {
   position: fixed !important;
   left: 0;
@@ -637,13 +634,12 @@ body {
   z-index: 20;
 }
 
-/* In fullscreen, reserve space on the right for the Close pill
-   so it does not overlap the timeframe buttons group */
+
 .fp-chart-fullscreen-wrapper.is-fullscreen .fp-chart-header-right {
-  margin-right: 5.5rem; /* ≈ Close button width + gap */
+  margin-right: 5.5rem; 
 }
 
-/* Push time buttons and Close to the right as one group */
+
 .fp-chart-fullscreen-wrapper .fp-chart-header-right {
   margin-left: auto;
 }
@@ -687,7 +683,7 @@ body {
   display: none;
 }
 
-/* Segment control — pill buttons, active = amber gradient */
+
 .fp-segment-group {
   display: inline-flex;
   align-items: center;
@@ -721,7 +717,7 @@ body {
   box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
 }
 
-/* Buttons */
+
 .fp-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -760,7 +756,7 @@ body {
   background: rgba(245, 158, 11, 0.08);
 }
 
-/* Progress bar */
+
 .fp-progress-track {
   height: 0.5rem;
   background: var(--fp-dark-400);
@@ -784,7 +780,7 @@ body {
   box-shadow: 0 0 10px rgba(255, 59, 48, 0.25);
 }
 
-/* Metric card — icon, label, large value */
+
 .fp-metric-card {
   background: var(--fp-surface);
   background: var(--fp-gradient-card);
@@ -822,14 +818,14 @@ body {
   color: var(--fp-danger);
 }
 
-/* E8-style app layout: sidebar + main + top bar */
+
 .fp-app-layout {
   display: flex;
   min-height: 100vh;
   background: var(--fp-bg);
 }
 
-/* Landing page: no sidebar, full-width main, minimal header (auth only) */
+
 body.fp-landing-page .fp-landing-layout {
   width: 100%;
   flex-direction: column;
@@ -867,7 +863,7 @@ body.fp-landing-page .fp-landing-main {
   gap: 0.75rem;
 }
 
-/* Auth page: no sidebar, no topbar, no footer — only sign-in/register form */
+
 body.fp-auth-page .fp-auth-layout {
   width: 100%;
   min-height: 100vh;
@@ -1279,7 +1275,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Main container — matches Next.js: py-6 md:py-12, space-y-6 */
+
 .main-container {
   padding: 1.5rem 1rem;
   margin-left: auto;
@@ -1298,7 +1294,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Landing page — hero and widgets (reference: Crypture-style) */
+
 .fp-landing-hero {
   padding-top: 0.5rem;
 }
@@ -1345,7 +1341,7 @@ body.fp-auth-page .fp-auth-main {
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
 }
 
-/* Section heading — unified across pages (Next.js: text-xl md:text-2xl font-semibold mb-2) */
+
 .section-heading {
   font-size: 1.25rem;
   font-weight: 600;
@@ -1359,7 +1355,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Home grid: 1 col → lg 2 cols → xl 3 cols (Next.js: overview | trending | categories) */
+
 .home-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1381,7 +1377,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Header */
+
 .forexpulse-header {
   border-bottom: 1px solid var(--fp-dark-400);
   height: 5rem;
@@ -1432,7 +1428,7 @@ body.fp-auth-page .fp-auth-main {
   color: var(--fp-foreground);
 }
 
-/* Pair overview card (left column on home) — E8-style fp-card */
+
 #pair-overview {
   width: 100%;
   padding: 1rem 1.25rem;
@@ -1496,7 +1492,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Trending / live pairs panel — E8-style fp-card */
+
 #trending-pairs {
   width: 100%;
   display: flex;
@@ -1573,7 +1569,7 @@ body.fp-auth-page .fp-auth-main {
   text-overflow: ellipsis;
 }
 
-/* Sessions / categories section — E8-style fp-card */
+
 #sessions {
   padding: 1.25rem 1.25rem 2rem;
   margin-top: 1.25rem;
@@ -1620,7 +1616,7 @@ body.fp-auth-page .fp-auth-main {
   font-weight: 500;
 }
 
-/* Data table base */
+
 .fp-table {
   width: 100%;
   border-collapse: collapse;
@@ -1681,7 +1677,7 @@ body.fp-auth-page .fp-auth-main {
   padding-right: 1.25rem;
 }
 
-/* Badges */
+
 .fp-badge {
   font-weight: 500;
   margin-top: 0.5rem;
@@ -1730,7 +1726,7 @@ body.fp-auth-page .fp-auth-main {
   line-height: 1;
 }
 
-/* Pair detail: coin-header–style stats (Next.js #coin-header .stats) */
+
 .fp-coin-header .fp-pair-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1776,7 +1772,7 @@ body.fp-auth-page .fp-auth-main {
   color: var(--fp-red-500);
 }
 
-/* Section divider (Next.js #live-data-wrapper .divider) */
+
 .fp-section-divider {
   margin: 2rem 0 0;
   border: none;
@@ -1784,7 +1780,7 @@ body.fp-auth-page .fp-auth-main {
   background: var(--fp-purple-600);
 }
 
-/* Skeleton loading */
+
 .fp-skeleton {
   background: rgba(20, 20, 26, 0.6);
   border-radius: 0.25rem;
@@ -1803,7 +1799,7 @@ body.fp-auth-page .fp-auth-main {
   }
 }
 
-/* Custom scrollbar */
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -1822,7 +1818,7 @@ body.fp-auth-page .fp-auth-main {
   background: #171a34;
 }
 
-/* Pair detail page — Next.js: gap-6 xl:gap-10, secondary max-lg:mt-8 */
+
 #pair-details-page {
   padding: 3rem 1rem;
   margin: 0 auto;
@@ -1918,7 +1914,7 @@ body.fp-auth-page .fp-auth-main {
   text-decoration: none;
 }
 
-/* Converter panel */
+
 #converter {
   width: 100%;
   margin-bottom: 1.5rem;
@@ -1990,7 +1986,7 @@ body.fp-auth-page .fp-auth-main {
   z-index: 20;
 }
 
-/* Coin/card style — E8-style consistent with .fp-card */
+
 .fp-coin-card,
 #coin-card {
   background: var(--fp-surface);
@@ -2009,7 +2005,7 @@ body.fp-auth-page .fp-auth-main {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-/* Candlestick chart container — E8-style; use --fp-chart-up / --fp-chart-down for custom charts */
+
 #candlestick-chart,
 #pair-detail-chart {
   background: var(--fp-dark-400);
@@ -2049,7 +2045,7 @@ body.fp-auth-page .fp-auth-main {
   border-color: var(--fp-accent);
 }
 
-/* Reusable card hover (e.g. pair-categories table wrapper) */
+
 .fp-card-hover {
   transition: border-color 0.2s, background 0.2s;
 }
@@ -2059,7 +2055,7 @@ body.fp-auth-page .fp-auth-main {
   background: rgba(20, 20, 26, 0.5) !important;
 }
 
-/* All Pairs page */
+
 #pairs-page {
   padding: 3rem 1rem;
   margin: 0 auto;
@@ -2143,7 +2139,7 @@ body.fp-auth-page .fp-auth-main {
   padding-left: 1.25rem;
 }
 
-/* Search modal — z-index above sidebar (1001) so it shows on mobile when opened from drawer */
+
 #search-modal-overlay {
   position: fixed;
   inset: 0;
@@ -2162,7 +2158,7 @@ body.fp-auth-page .fp-auth-main {
   display: none;
 }
 
-/* Hide topbar when search modal is open */
+
 body.fp-search-modal-open .fp-topbar {
   display: none !important;
 }
@@ -2257,7 +2253,7 @@ body.fp-search-modal-open .fp-topbar {
   text-transform: uppercase;
 }
 
-/* Pagination */
+
 #fp-pagination {
   display: flex;
   width: 100%;
@@ -2310,7 +2306,7 @@ body.fp-search-modal-open .fp-topbar {
   opacity: 0.5;
 }
 
-/* Body layout for sticky footer */
+
 body {
   min-height: 100vh;
   display: flex;
@@ -2335,7 +2331,7 @@ body>main {
   flex: 1 0 auto;
 }
 
-/* Footer — replication optional */
+
 .fp-footer {
   flex-shrink: 0;
   margin-top: auto;
@@ -2382,7 +2378,7 @@ body>main {
   color: var(--fp-muted);
 }
 
-/* Breadcrumbs */
+
 .fp-breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -2412,7 +2408,7 @@ body>main {
   font-weight: 500;
 }
 
-/* Error state block */
+
 .fp-error-block {
   padding: 1.5rem;
   border-radius: 0.5rem;
@@ -2435,7 +2431,7 @@ body>main {
   font-weight: 500;
 }
 
-/* 404 page: minimal layout — hide sidebar and footer so only logo + message + actions show */
+
 body.fp-404-page .fp-sidebar {
   display: none !important;
 }
@@ -2443,7 +2439,7 @@ body.fp-404-page .fp-footer {
   display: none !important;
 }
 
-/* ====== Financial data utility classes ====== */
+
 .fp-profit { color: #22c55e; }
 .fp-loss   { color: #ef4444; }
 .fp-profit-bg {
@@ -2457,13 +2453,13 @@ body.fp-404-page .fp-footer {
   color: #ef4444;
 }
 
-/* ====== Dot-grid background ====== */
+
 .fp-dot-grid-bg {
   background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
-/* ====== Dashboard / app pages — landing-aligned design ====== */
+
 .fp-badge-section {
   display: inline-block;
   font-size: 0.625rem;
@@ -2504,7 +2500,7 @@ body.fp-404-page .fp-footer {
   background-clip: text;
 }
 
-/* Quick link card — landing style (icon box + label + arrow) */
+
 .fp-quicklink-card {
   display: flex;
   align-items: center;
@@ -2562,7 +2558,7 @@ body.fp-404-page .fp-footer {
   transform: translateX(4px);
 }
 
-/* Dashboard tab strip — nav-pill style (landing) */
+
 .fp-dashboard-tabs-landing {
   display: flex;
   gap: 0.5rem;
@@ -2597,7 +2593,7 @@ body.fp-404-page .fp-footer {
   border-bottom: none;
 }
 
-/* ====== Collapsible sidebar ====== */
+
 .fp-sidebar {
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2709,7 +2705,7 @@ body.fp-404-page .fp-footer {
   transform: rotate(180deg);
 }
 
-/* ====== Dashboard metric card (design ref) ====== */
+
 .fp-metric-card-dynamic {
   background: linear-gradient(145deg, #141418 0%, #0f0f12 100%);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -2723,7 +2719,7 @@ body.fp-404-page .fp-footer {
   transform: translateY(-1px);
 }
 
-/* ====== Dashboard tab system ====== */
+
 .fp-tab-btn {
   padding: 0.5rem 0.25rem 0.75rem;
   font-size: 0.875rem;
@@ -2748,7 +2744,7 @@ body.fp-404-page .fp-footer {
   border-bottom-color: var(--fp-accent);
 }
 
-/* ====== Custom scrollbar (dark amber theme) ====== */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -2764,7 +2760,7 @@ body.fp-404-page .fp-footer {
   background: #3f3f46;
 }
 
-/* ====== Full responsive — all devices ====== */
+
 html {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
@@ -2774,7 +2770,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Topbar — smaller padding and flexible layout on small screens */
+
 @media (max-width: 767px) {
   .fp-topbar {
     padding: 0 0.75rem;
@@ -2817,7 +2813,7 @@ body {
   }
 }
 
-/* Table wrapper — horizontal scroll on small screens */
+
 .fp-table-wrapper,
 .fp-table-responsive,
 #pairs-page .content,
@@ -2860,7 +2856,7 @@ body {
   }
 }
 
-/* Footer — stack on very small screens; safe area for notched devices */
+
 .fp-footer {
   padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
@@ -2879,7 +2875,7 @@ body {
   }
 }
 
-/* Search modal — full width and safe area on mobile */
+
 @media (max-width: 480px) {
   #search-modal-overlay {
     padding: max(1rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
@@ -2903,7 +2899,7 @@ body {
   }
 }
 
-/* Segment group — wrap on small screens */
+
 @media (max-width: 479px) {
   .fp-segment-group {
     flex-wrap: wrap;
@@ -2916,7 +2912,7 @@ body {
   }
 }
 
-/* Coin header / pair stats — 1 col on small, 2 then 3 on larger */
+
 @media (max-width: 479px) {
   .fp-coin-header .fp-pair-stats {
     grid-template-columns: 1fr;
@@ -2947,7 +2943,7 @@ body {
   }
 }
 
-/* Chart min-heights — reduce on mobile for better fit */
+
 @media (max-width: 767px) {
   .fp-card-chart,
   .fp-card.fp-card-chart {
@@ -2976,7 +2972,7 @@ body {
   }
 }
 
-/* Main container — tighter padding on mobile */
+
 @media (max-width: 479px) {
   .main-container {
     padding: 1rem 0.75rem;
@@ -2994,7 +2990,7 @@ body {
   }
 }
 
-/* Dashboard — tab strip scroll, metrics grid, trading table */
+
 @media (max-width: 767px) {
   .fp-dashboard-tabs {
     flex-wrap: nowrap;
@@ -3032,14 +3028,14 @@ body {
   }
 }
 
-/* Tools page — cards full width on mobile */
+
 @media (max-width: 767px) {
   .fp-card-tool {
     max-width: 100%;
   }
 }
 
-/* Pagination — wrap and smaller touch targets */
+
 @media (max-width: 479px) {
   #fp-pagination {
     gap: 0.25rem;
@@ -3056,7 +3052,7 @@ body {
   }
 }
 
-/* Converter — stack inputs on very small */
+
 @media (max-width: 380px) {
   #converter .input-wrapper,
   #converter .output-wrapper {
@@ -3067,7 +3063,7 @@ body {
   }
 }
 
-/* Touch-friendly minimum tap targets (44px) where needed */
+
 @media (pointer: coarse) {
   .fp-sidebar-nav a,
   .fp-sidebar-footer a,

@@ -1,7 +1,4 @@
-/**
- * Admin dashboard — login, session, tabs, user management.
- * Uses utils.js (ForexPulseUtils) for showError and escapeHtml when available (e.g. on auth.html).
- */
+
 
 var showError = (window.ForexPulseUtils && window.ForexPulseUtils.showError) || function (id, message) {
   var el = document.getElementById(id);

@@ -1,19 +1,17 @@
-/**
- * Auth page logic — localStorage session. Replace with real API when you add a backend.
- */
+
 
 const AUTH_STORAGE_KEY = 'forex_dashboard_user';
 const ADMIN_ACTIVITY_KEY = 'forex_admin_activity';
 const ADMIN_ACTIVITY_MAX = 50;
 
-// Avoid duplicate declaration when admin.js loads first (auth.html). Use window and set only if missing.
+
 if (typeof window !== 'undefined') {
   if (window.ADMIN_STORAGE_KEY === undefined) window.ADMIN_STORAGE_KEY = 'forex_admin_session';
   if (window.ADMIN_EMAIL === undefined) window.ADMIN_EMAIL = 'admin@forex.com';
   if (window.ADMIN_PASSWORD === undefined) window.ADMIN_PASSWORD = 'admin123';
 }
 
-/** Append a message to the admin activity log (same storage as admin dashboard). */
+
 function appendAdminActivity(message) {
   try {
     const raw = localStorage.getItem(ADMIN_ACTIVITY_KEY);
@@ -23,10 +21,7 @@ function appendAdminActivity(message) {
   } catch (e) {}
 }
 
-/**
- * Get current user from storage (localStorage first, then sessionStorage). Returns null if not logged in.
- * Also returns a synthetic admin user when admin is signed in (forex_admin_session).
- */
+
 function getCurrentUser() {
   try {
     const raw = localStorage.getItem(AUTH_STORAGE_KEY) || sessionStorage.getItem(AUTH_STORAGE_KEY);
@@ -41,17 +36,12 @@ function getCurrentUser() {
   }
 }
 
-/**
- * Check if user is authenticated.
- */
+
 function isAuthenticated() {
   return !!getCurrentUser();
 }
 
-/**
- * Save user session. If rememberMe is true, use localStorage (persists after close); else sessionStorage (logout when tab closes).
- * role: 'user' | 'admin' (default 'user').
- */
+
 function setSession(user, rememberMe, role) {
   const payload = JSON.stringify({
     email: user.email,
@@ -68,9 +58,7 @@ function setSession(user, rememberMe, role) {
   }
 }
 
-/**
- * Clear session (logout) from both storages. Also clears admin session when signing out.
- */
+
 function clearSession() {
   localStorage.removeItem(AUTH_STORAGE_KEY);
   sessionStorage.removeItem(AUTH_STORAGE_KEY);
@@ -81,9 +69,7 @@ function clearSession() {
   } catch (e) {}
 }
 
-/**
- * Register — store user and set session. Replace with API call in production.
- */
+
 function register(name, email, password) {
   const users = JSON.parse(localStorage.getItem('forex_dashboard_users') || '[]');
   if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
@@ -96,10 +82,7 @@ function register(name, email, password) {
   return { ok: true };
 }
 
-/**
- * Login — check credentials and set session. rememberMe: use localStorage so session persists after closing browser.
- * role: 'user' | 'admin' (default 'user').
- */
+
 function login(email, password, rememberMe, role) {
   const users = JSON.parse(localStorage.getItem('forex_dashboard_users') || '[]');
   const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
@@ -112,10 +95,7 @@ function login(email, password, rememberMe, role) {
   return { ok: true };
 }
 
-/**
- * Check if an account exists for the given email (for forgot password flow).
- * Returns { ok: true } if found, { ok: false, error } otherwise.
- */
+
 function requestPasswordReset(email) {
   const trimmed = (email || '').trim().toLowerCase();
   if (!trimmed) return { ok: false, error: 'Please enter your email.' };
@@ -125,10 +105,7 @@ function requestPasswordReset(email) {
   return { ok: true };
 }
 
-/**
- * Set a new password for the user with the given email.
- * Returns { ok: true } on success, { ok: false, error } otherwise.
- */
+
 function resetPassword(email, newPassword) {
   const trimmed = (email || '').trim().toLowerCase();
   if (!trimmed) return { ok: false, error: 'Email is required.' };
@@ -141,11 +118,7 @@ function resetPassword(email, newPassword) {
   return { ok: true };
 }
 
-/**
- * Change password for the currently signed-in user.
- * currentPassword: existing password; newPassword: new password (min 6 chars).
- * Returns { ok: true } on success, { ok: false, error } otherwise.
- */
+
 function changePassword(currentPassword, newPassword) {
   const user = getCurrentUser();
   if (!user || !user.email) return { ok: false, error: 'You must be signed in to change your password.' };
@@ -160,10 +133,7 @@ function changePassword(currentPassword, newPassword) {
   return { ok: true };
 }
 
-/**
- * Update the current user's display name. Updates session and stored user list.
- * Returns true if updated, false if not logged in.
- */
+
 function updateDisplayName(newName) {
   const user = getCurrentUser();
   if (!user || !user.email) return false;
@@ -184,10 +154,7 @@ function updateDisplayName(newName) {
   return true;
 }
 
-/**
- * Redirect after login: admin -> admin.html, user -> home.html.
- * Sidebar will open by default on the next page (see fp-sidebar-open-after-login in app pages).
- */
+
 function redirectToDashboard() {
   const user = getCurrentUser();
   const isAdmin = user && user.role === 'admin';
@@ -195,9 +162,7 @@ function redirectToDashboard() {
   window.location.href = isAdmin ? 'admin.html' : 'home.html';
 }
 
-/**
- * Show error message in the given element. Uses ForexPulseUtils.showError when utils.js is loaded (e.g. auth.html).
- */
+
 function showError(elementId, message) {
   if (window.ForexPulseUtils && window.ForexPulseUtils.showError) {
     window.ForexPulseUtils.showError(elementId, message);
@@ -451,7 +416,7 @@ function bindForgotPassword() {
   }
 }
 
-// Expose for guards and other pages
+
 if (typeof window !== 'undefined') {
   window.getCurrentUser = getCurrentUser;
   window.isAuthenticated = isAuthenticated;
@@ -459,7 +424,7 @@ if (typeof window !== 'undefined') {
   window.clearSession = clearSession;
 }
 
-// Run on auth page load
+
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bindAuthPage);

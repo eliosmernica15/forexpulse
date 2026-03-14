@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FX Dashboard Replica</title>
     
-    <!-- Tailwind CSS -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Chart.js -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -204,7 +204,7 @@
 </head>
 <body class="antialiased h-screen flex overflow-hidden selection:bg-brand-yellow selection:text-black">
 
-    <!-- Sidebar -->
+    
     <aside class="w-16 flex-shrink-0 flex flex-col items-center py-6 bg-dark-sidebar border-r border-dark-border z-20">
         <div class="mb-10 text-gray-500 font-bold text-sm tracking-wider">FX</div>
         
@@ -236,10 +236,10 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
+    
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-dark-bg">
         
-        <!-- Header -->
+        
         <header class="h-16 border-b border-dark-border flex items-center justify-between px-8 bg-dark-bg/80 backdrop-blur-sm z-10 sticky top-0">
             <div class="flex items-center gap-3">
                 <h1 class="text-lg font-semibold text-white tracking-tight">Dashboard</h1>
@@ -255,11 +255,11 @@
             </div>
         </header>
 
-        <!-- Scrollable Content -->
+        
         <div class="flex-1 overflow-y-auto scroll-smooth">
             <div class="p-8 max-w-[1600px] mx-auto">
                 
-                <!-- Account Header Section -->
+                
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div class="flex items-center gap-4">
                         <div class="relative">
@@ -288,16 +288,16 @@
                     </button>
                 </div>
 
-                <!-- Tabs -->
+                
                 <div class="flex gap-8 border-b border-dark-border mb-8">
                     <button class="pb-3 text-sm font-medium text-white tab-active transition-colors">Account Overview</button>
                     <button class="pb-3 text-sm font-medium text-gray-500 hover:text-gray-300 transition-colors">Trading Overview</button>
                 </div>
 
-                <!-- Charts Grid -->
+                
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
                     
-                    <!-- Main Balance Chart -->
+                    
                     <div class="xl:col-span-2 bg-dark-card rounded-2xl p-6 border border-dark-border relative">
                         <div class="flex justify-between items-start mb-6">
                             <div>
@@ -308,7 +308,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Timeframe Selectors -->
+                            
                             <div class="flex bg-dark-input rounded-lg p-1 border border-dark-border">
                                 <button class="time-btn px-3 py-1.5 text-[11px] font-medium rounded text-gray-500">1D</button>
                                 <button class="time-btn px-3 py-1.5 text-[11px] font-medium rounded text-gray-500">1W</button>
@@ -321,12 +321,12 @@
                             </div>
                         </div>
                         
-                        <!-- Chart Container -->
+                        
                         <div class="h-72 w-full relative">
                             <canvas id="balanceChart"></canvas>
                         </div>
 
-                        <!-- Chart overlay info -->
+                        
                         <div class="absolute top-20 left-6 pointer-events-none opacity-0 transition-opacity duration-200" id="chart-tooltip">
                             <div class="bg-dark-card/95 border border-dark-border rounded-lg px-3 py-2 shadow-xl">
                                 <div class="text-[10px] text-gray-500 mb-0.5">Nov 15, 2023</div>
@@ -335,11 +335,11 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: P/L & Stats -->
+                    
                     <div class="flex flex-col gap-6">
-                        <!-- P/L Card -->
+                        
                         <div class="bg-dark-card rounded-2xl p-6 border border-dark-border flex-1 relative overflow-hidden">
-                            <!-- Background glow -->
+                            
                             <div class="absolute top-0 right-0 w-64 h-64 bg-brand-green/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                             
                             <div class="flex justify-between items-start mb-6 relative z-10">
@@ -360,7 +360,7 @@
                                 </div>
                             </div>
 
-                            <!-- P/L Distribution Bars -->
+                            
                             <div class="flex gap-6 mb-6 relative z-10">
                                 <div class="flex-1">
                                     <div class="flex justify-between text-[10px] mb-1.5">
@@ -382,12 +382,12 @@
                                 </div>
                             </div>
 
-                            <!-- Mini Bar Chart -->
+                            
                             <div class="h-24 w-full relative z-10">
                                 <canvas id="plChart"></canvas>
                             </div>
 
-                            <!-- Side Stats -->
+                            
                             <div class="mt-6 pt-6 border-t border-dark-border space-y-3 relative z-10">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center gap-2">
@@ -415,12 +415,12 @@
                     </div>
                 </div>
 
-                <!-- Trading Objectives -->
+                
                 <div class="mb-8">
                     <h3 class="text-sm font-medium text-gray-400 mb-4 tracking-wide">Trading Objectives</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
                         
-                        <!-- Metric 1: Trades -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Trades</span>
@@ -437,7 +437,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 2: Lots -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Lots</span>
@@ -457,7 +457,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 3: Average RRR -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Avg RRR</span>
@@ -476,7 +476,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 4: Win Rate -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Win Rate</span>
@@ -492,7 +492,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 5: Trading Days -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Days</span>
@@ -508,7 +508,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 6: Live Profit Share -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Profit Share</span>
@@ -523,7 +523,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 7: Avg Winning Trade -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Avg Win</span>
@@ -539,7 +539,7 @@
                             </div>
                         </div>
 
-                        <!-- Metric 8: Avg Losing Trade -->
+                        
                         <div class="metric-card p-4 rounded-xl">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Avg Loss</span>
@@ -558,7 +558,7 @@
                     </div>
                 </div>
 
-                <!-- Trading History Table -->
+                
                 <div class="bg-dark-card rounded-2xl border border-dark-border overflow-hidden">
                     <div class="p-5 border-b border-dark-border flex justify-between items-center">
                         <h3 class="text-sm font-medium text-gray-300">Trading History</h3>
@@ -586,7 +586,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-dark-border text-gray-400" id="trade-history-body">
-                                <!-- Rows generated by JS -->
+                                
                             </tbody>
                         </table>
                     </div>

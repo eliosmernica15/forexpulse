@@ -1,9 +1,4 @@
-/**
- * ForexPulse — reusable data table (vanilla JS)
- * columns: [ { header: string, cell: function(row, index) -> string|HTMLElement, cellClassName?: string } ]
- * data: array of row objects
- * rowKey: function(row, index) -> string|number
- */
+
 (function () {
   function renderCell(col, row, rowIndex) {
     var content = col.cell(row, rowIndex);

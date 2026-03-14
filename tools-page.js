@@ -1,8 +1,4 @@
-/**
- * Tools page: select a tool (no dropdown), then display it.
- * Uses auth.js for getCurrentUser. Real data via Frankfurter API.
- * Storage, alerts, demo balance, toast, escapeHtml from utils.js (ForexPulseUtils).
- */
+
 
 var RATES_API = 'https://api.frankfurter.app';
 
@@ -10,7 +6,7 @@ if (typeof isAuthenticated === 'function' && !isAuthenticated()) {
   window.location.href = 'auth.html';
 }
 
-// Use shared helpers from utils.js (loaded before this script on tools.html)
+
 var getAlertsStorageKey = window.ForexPulseUtils && window.ForexPulseUtils.getAlertsStorageKey;
 var getDemoBalanceKey = window.ForexPulseUtils && window.ForexPulseUtils.getDemoBalanceKey;
 var getDemoBalance = window.ForexPulseUtils && window.ForexPulseUtils.getDemoBalance;
@@ -20,7 +16,7 @@ var saveAlerts = window.ForexPulseUtils && window.ForexPulseUtils.saveAlerts;
 var showToast = window.ForexPulseUtils && window.ForexPulseUtils.showToast;
 var escapeHtml = window.ForexPulseUtils && window.ForexPulseUtils.escapeHtml;
 
-// --- Tool selection (no dropdown: select page vs display page) ---
+
 var toolSelect = document.getElementById('tool-select');
 var toolDisplay = document.getElementById('tool-display');
 var toolBack = document.getElementById('tool-back');
@@ -49,20 +45,20 @@ if (toolBack) toolBack.addEventListener('click', function () {
   showSelect();
 });
 
-// Hash on load: e.g. tools.html#alerts
+
 var hash = (window.location.hash || '').replace(/^#/, '');
 if (hash === 'pip' || hash === 'position' || hash === 'converter' || hash === 'alerts') {
   showTool(hash);
 }
 
-// --- User in header ---
+
 var userEl = document.getElementById('tools-user');
 if (userEl && typeof getCurrentUser === 'function') {
   var u = getCurrentUser();
   if (u && u.email) userEl.textContent = u.email;
 }
 
-// --- Pip value (real rate for USD/JPY from API) ---
+
 var pipUsdJpyRate = null;
 function fetchPipRate() {
   fetch(RATES_API + '/latest?from=USD&to=JPY')
@@ -92,7 +88,7 @@ var pipPairEl = document.getElementById('pip-pair');
 if (pipPairEl) pipPairEl.addEventListener('change', updatePip);
 fetchPipRate();
 
-// --- Position size ---
+
 var posBalanceEl = document.getElementById('pos-balance');
 if (posBalanceEl) posBalanceEl.value = getDemoBalance();
 
@@ -116,7 +112,7 @@ var posSlInput = document.getElementById('pos-sl');
 if (posSlInput) posSlInput.addEventListener('input', updatePosition);
 updatePosition();
 
-// --- Converter (Frankfurter) ---
+
 var converterTimeout = null;
 function fetchConverterResult() {
   var amount = parseFloat(document.getElementById('conv-amount') && document.getElementById('conv-amount').value) || 0;
@@ -151,7 +147,7 @@ var convToEl = document.getElementById('conv-to');
 if (convToEl) convToEl.addEventListener('change', updateConverter);
 fetchConverterResult();
 
-// --- Alerts ---
+
 function renderAlertsList() {
   var list = document.getElementById('alerts-list');
   var empty = document.getElementById('alerts-empty');

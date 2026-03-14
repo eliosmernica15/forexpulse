@@ -1,7 +1,4 @@
-/**
- * ForexPulse — static list of forex pairs (majors + minors)
- * Used for All Pairs page, search modal, and dropdowns.
- */
+
 (function () {
   var FOREX_PAIRS = [
     { pair: 'EUR/USD', base: 'EUR', quote: 'USD', name: 'Euro / US Dollar', category: 'majors' },
