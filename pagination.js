@@ -1,7 +1,3 @@
-/**
- * ForexPulse — pagination UI (vanilla JS)
- * Renders prev/next + page numbers with ellipsis, calls onPageChange(page) when user clicks.
- */
 (function () {
   function renderPagination(containerEl, options) {
     if (!containerEl || !window.ForexPulseUtils) return null;

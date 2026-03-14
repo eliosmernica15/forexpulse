@@ -637,6 +637,12 @@ body {
   z-index: 20;
 }
 
+/* In fullscreen, reserve space on the right for the Close pill
+   so it does not overlap the timeframe buttons group */
+.fp-chart-fullscreen-wrapper.is-fullscreen .fp-chart-header-right {
+  margin-right: 5.5rem; /* ≈ Close button width + gap */
+}
+
 /* Push time buttons and Close to the right as one group */
 .fp-chart-fullscreen-wrapper .fp-chart-header-right {
   margin-left: auto;
