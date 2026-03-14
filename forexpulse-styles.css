@@ -2993,9 +2993,8 @@ body {
 
 @media (max-width: 767px) {
   .fp-dashboard-tabs {
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     padding-bottom: 0;
     margin-bottom: 1.5rem;
   }
